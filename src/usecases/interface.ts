@@ -1,4 +1,4 @@
-import type { CommitConfig } from "@/entities/CommitConfig";
+import type { WorkingState } from "@/entities/WorkingState";
 
 export const IGitService = Symbol("IGitService");
 export interface GitService {
@@ -8,11 +8,14 @@ export interface GitService {
   countUntrackedLines(): Promise<number>;
 }
 
-export const ICommitConfigBuilder = Symbol("ICommitConfigBuilder");
-export interface CommitConfigBuilder {
-  build(): Promise<CommitConfig>;
-  withMaxFiles(maxFiles: number): CommitConfigBuilder;
-  withMaxLines(maxLines: number): CommitConfigBuilder;
+export const IWorkingStateBuilder = Symbol("IWorkingStateBuilder");
+export interface WorkingStateBuilder {
+  build(): Promise<WorkingState>;
+  withMaxFiles(maxFiles: number): WorkingStateBuilder;
+  withMaxLines(maxLines: number): WorkingStateBuilder;
+  withChangedFiles(changedFiles: number): WorkingStateBuilder;
+  withChangedLines(changedLines: number): WorkingStateBuilder;
+  withUntrackedLines(untrackedLines: number): WorkingStateBuilder;
 }
 
 export const IStopDicisionPresenter = Symbol("IStopDicisionPresenter");

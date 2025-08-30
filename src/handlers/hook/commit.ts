@@ -1,6 +1,6 @@
 import { ConsoleStopDecisionPresenter } from "@/presenters/ConsoleStopDecisionPresenter";
 import { CmdGitService } from "@/services/CmdGitService";
-import { JsonCommitConfigBuilder } from "@/services/CommitConfigBuilder";
+import { JsonWorkingStateBuilder } from "@/services/WorkingStateBuilder";
 import { StdinHookService } from "@/services/StdinHookService";
 import { CommitReminder } from "@/usecases/CommitReminder";
 import { container } from "tsyringe";
@@ -13,7 +13,7 @@ type CommitOptions = {
 export async function commitAction(options: CommitOptions) {
   const stdinHookService = container.resolve(StdinHookService);
   const gitService = container.resolve(CmdGitService);
-  const configBuilder = container.resolve(JsonCommitConfigBuilder);
+  const configBuilder = container.resolve(JsonWorkingStateBuilder);
   const decisionPresenter = container.resolve(ConsoleStopDecisionPresenter);
 
   const hook = await stdinHookService.parse();
