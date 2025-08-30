@@ -1,7 +1,7 @@
 import type {
-  WorkingStateBuilder,
   GitService,
   StopDecisionPresenter,
+  WorkingStateBuilder,
 } from "./interface";
 import type { StopHookInput } from "./port";
 

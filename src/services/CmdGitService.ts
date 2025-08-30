@@ -1,6 +1,6 @@
-import { injectable } from "tsyringe";
-import { stat } from "fs/promises";
 import { exec } from "child_process";
+import { stat } from "fs/promises";
+import { injectable } from "tsyringe";
 
 import type { GitService } from "@/usecases/interface";
 
