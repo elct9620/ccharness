@@ -25,7 +25,7 @@ Example service interface:
 ```typescript
 // src/services/gitService.ts
 
-import { GitService } from '@/usecases/interface'
+import { GitService } from "@/usecases/interface";
 
 @injectable()
 export class CmdGitService implements GitService {
@@ -45,14 +45,17 @@ Example entity:
 // src/entities/CommitConfig.ts
 
 export class CommitConfig {
-  constructor(public readonly maxFiles: number, public readonly maxLines: number) {}
+  constructor(
+    public readonly maxFiles: number,
+    public readonly maxLines: number,
+  ) {}
 
   isExceededFiles(fileCount: number): boolean {
-    return fileCount >= this.maxFiles
+    return fileCount >= this.maxFiles;
   }
 
   isExceededLines(lineCount: number): boolean {
-    return lineCount > this.maxLines
+    return lineCount > this.maxLines;
   }
 }
 ```
@@ -68,7 +71,7 @@ Example use case:
 ```typescript
 // src/usecases/CommitReminderCommand.ts
 
-import { GitService } from './interface'
+import { GitService } from "./interface";
 
 export class CommitReminderCommand {
   constructor(private gitService: GitService) {}
@@ -91,9 +94,9 @@ Following is example of a command handler:
 // hook.command('commit').action(commitAction)
 
 export async function commitAction() {
-    const gitService = container.resolve<GitService>(CmdGitService)
-    const command = new CommitReminderCommand(gitService)
-    await command.execute()
+  const gitService = container.resolve<GitService>(CmdGitService);
+  const command = new CommitReminderCommand(gitService);
+  await command.execute();
 }
 ```
 

@@ -5,7 +5,7 @@ import type {
 } from "./interface";
 import type { StopHookInput } from "./port";
 
-export type CommitReminderInput = {
+export type GuardCommitInput = {
   hook: StopHookInput;
   options: {
     maxFiles: number;
@@ -13,14 +13,14 @@ export type CommitReminderInput = {
   };
 };
 
-export class CommitReminder {
+export class GuardCommit {
   constructor(
     private readonly gitService: GitService,
     private readonly stateBuilder: WorkingStateBuilder,
     private readonly decisionPresenter: StopDecisionPresenter,
   ) {}
 
-  async execute(input: CommitReminderInput): Promise<void> {
+  async execute(input: GuardCommitInput): Promise<void> {
     if (input.hook.stopHookActive) {
       await this.decisionPresenter.allow();
       return;

@@ -2,15 +2,15 @@ import { ConsoleStopDecisionPresenter } from "@/presenters/ConsoleStopDecisionPr
 import { CmdGitService } from "@/services/CmdGitService";
 import { JsonWorkingStateBuilder } from "@/services/JsonWorkingStateBuilder";
 import { StdinHookService } from "@/services/StdinHookService";
-import { CommitReminder } from "@/usecases/CommitReminder";
+import { GuardCommit } from "@/usecases/GuardCommit";
 import { container } from "tsyringe";
 
-type CommitOptions = {
+type GuardCommitOptions = {
   maxFiles: string;
   maxLines: string;
 };
 
-export async function commitAction(options: CommitOptions) {
+export async function guardCommitAction(options: GuardCommitOptions) {
   const stdinHookService = container.resolve(StdinHookService);
   const gitService = container.resolve(CmdGitService);
   const configBuilder = container.resolve(JsonWorkingStateBuilder);
@@ -18,12 +18,12 @@ export async function commitAction(options: CommitOptions) {
 
   const hook = await stdinHookService.parse();
 
-  const commitReminder = new CommitReminder(
+  const guardCommit = new GuardCommit(
     gitService,
     configBuilder,
     decisionPresenter,
   );
-  await commitReminder.execute({
+  await guardCommit.execute({
     hook,
     options: {
       maxFiles: parseInt(options.maxFiles, 10),

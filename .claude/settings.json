@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx $CLAUDE_PROJECT_DIR hook commit"
+            "command": "npx $CLAUDE_PROJECT_DIR hook guard-commit"
           }
         ]
       }

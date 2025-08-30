@@ -22,7 +22,7 @@ Create a new hook in Claude Code with specified hook.
         "hooks": [
           {
             "type": "command",
-            "command": "npx -y @aotoki/ccharness hook commit"
+            "command": "npx -y @aotoki/ccharness hook guard-commit"
           }
         ]
       }
@@ -41,9 +41,8 @@ Following commands are available to help your Claude Code workflow.
 
 A `Stop` hook to ensure Claude Code make a commit when throttled.
 
-
 ```bash
-npx -y @aotoki/ccharness hook commit
+npx -y @aotoki/ccharness hook guard-commit
 ```
 
 Options:

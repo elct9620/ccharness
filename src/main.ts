@@ -3,7 +3,7 @@
 import "@abraham/reflection";
 import { Command } from "commander";
 
-import { commitAction } from "@/handlers/hook/commit";
+import { guardCommitAction } from "@/handlers/hook/GuardCommit";
 
 const program = new Command();
 
@@ -14,7 +14,7 @@ program
 
 const hook = program.command("hook").description("The hooks for Claude Code");
 hook
-  .command("commit")
+  .command("guard-commit")
   .option(
     "-f, --max-files <number>",
     "The maximum number of files to trigger a commit reminder, use -1 to disable",
@@ -28,6 +28,6 @@ hook
   .description(
     "Ensure the agent commit frequently according to the throttle limit",
   )
-  .action(commitAction);
+  .action(guardCommitAction);
 
 await program.parseAsync(process.argv);

@@ -46,9 +46,9 @@ vitest path/to/test.spec.ts
 vitest --coverage
 
 # Test the CLI locally after build
-node dist/index.js hook commit --help
+node dist/index.js hook guard-commit --help
 # or using npx with the current directory
-npx . hook commit
+npx . hook guard-commit
 ```
 
 ## Architecture
@@ -118,7 +118,7 @@ Commands follow a hierarchical pattern using Commander.js:
 ```
 ccharness [command] [subcommand] [options]
 └── hook                    # Hook-related commands
-    └── commit             # Commit reminder hook
+    └── guard-commit       # Commit reminder hook
 ```
 
 ### Use Case Layer Rules
