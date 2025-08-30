@@ -1,17 +1,27 @@
-import type { GitService, StopDecisionPresenter } from "./interface";
+import type {
+  CommitConfigBuilder,
+  GitService,
+  StopDecisionPresenter,
+} from "./interface";
 import type { StopHookInput } from "./port";
 
-const MAX_CHANGED_FILES = 10;
-const MAX_CHANGED_LINES = 500;
+export type CommitReminderInput = {
+  hook: StopHookInput;
+  options: {
+    maxFiles: number;
+    maxLines: number;
+  };
+};
 
 export class CommitReminder {
   constructor(
     private readonly gitService: GitService,
+    private readonly configBuilder: CommitConfigBuilder,
     private readonly decisionPresenter: StopDecisionPresenter,
   ) {}
 
-  async execute(input: StopHookInput): Promise<void> {
-    if (input.stopHookActive) {
+  async execute(input: CommitReminderInput): Promise<void> {
+    if (input.hook.stopHookActive) {
       await this.decisionPresenter.allow();
       return;
     }
@@ -33,9 +43,15 @@ export class CommitReminder {
       return;
     }
 
-    const hasTooManyChangedFiles = changedFiles > MAX_CHANGED_FILES;
-    const hasTooManyChangedLines =
-      changedLines + untrackedLines > MAX_CHANGED_LINES;
+    const config = await this.configBuilder
+      .withMaxFiles(input.options.maxFiles)
+      .withMaxLines(input.options.maxLines)
+      .build();
+
+    const hasTooManyChangedFiles = config.isExceededMaxFiles(changedFiles);
+    const hasTooManyChangedLines = config.isExceededMaxLines(
+      changedLines + untrackedLines,
+    );
     const hasTooManyChanges = hasTooManyChangedFiles && hasTooManyChangedLines;
 
     let reason = "";

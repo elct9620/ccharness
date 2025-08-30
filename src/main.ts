@@ -15,6 +15,16 @@ program
 const hook = program.command("hook").description("The hooks for Claude Code");
 hook
   .command("commit")
+  .option(
+    "-f, --max-files <number>",
+    "The maximum number of files to trigger a commit reminder, use -1 to disable",
+    "-1",
+  )
+  .option(
+    "-l, --max-lines <number>",
+    "The maximum number of lines changed to trigger a commit reminder, use -1 to disable",
+    "-1",
+  )
   .description(
     "Ensure the agent commit frequently according to the throttle limit",
   )

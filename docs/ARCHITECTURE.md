@@ -9,9 +9,10 @@ The `ccharness` project is following Clean Architecture principles, which emphas
 ```
 |- src/
    |- main.ts   # Application entry point
+   |- entities/ # Core business entities
+   |- usecases/ # The application business logic
    |- handlers/ # Entry points for command handlers
    |- presenters/ # Interfaces for output or presentation logic
-   |- usecases/ # The application business logic
    |- services/ # Interfaces to external systems
 ```
 
@@ -29,6 +30,30 @@ import { GitService } from '@/usecases/interface'
 @injectable()
 export class CmdGitService implements GitService {
   // Implementation of GitService methods
+}
+```
+
+## Entity
+
+The `entities` directory contains the core business entities of the application. These entities represent the main concepts and data structures used in the application.
+
+> **IMPORTANT:** The entity should be plain TypeScript/JavaScript without any dependencies on external libraries or frameworks also no decorators.
+
+Example entity:
+
+```typescript
+// src/entities/CommitConfig.ts
+
+export class CommitConfig {
+  constructor(public readonly maxFiles: number, public readonly maxLines: number) {}
+
+  isExceededFiles(fileCount: number): boolean {
+    return fileCount >= this.maxFiles
+  }
+
+  isExceededLines(lineCount: number): boolean {
+    return lineCount > this.maxLines
+  }
 }
 ```
 
