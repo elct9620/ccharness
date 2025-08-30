@@ -2,6 +2,8 @@
 
 import { Command } from "commander";
 
+import { commitAction } from "@/handlers/hook/commit";
+
 const program = new Command();
 
 program
@@ -15,8 +17,6 @@ hook
   .description(
     "Ensure the agent commit frequently according to the throttle limit",
   )
-  .action(() => {
-    console.log("TODO: Commit when agent is stopped");
-  });
+  .action(commitAction);
 
-program.parse();
+await program.parseAsync(process.argv);

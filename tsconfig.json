@@ -30,6 +30,12 @@
     // "noPropertyAccessFromIndexSignature": true,
     "noEmit": true,
 
+    // Alias
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
     // Recommended Options
     "strict": true,
     "jsx": "react-jsx",
@@ -37,6 +43,7 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
+    "moduleResolution": "bundler",
     "skipLibCheck": true
   }
 }
