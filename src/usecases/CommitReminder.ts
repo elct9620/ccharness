@@ -1,4 +1,8 @@
 import type { GitService, StopDecisionPresenter } from "./interface";
+import type { StopHookInput } from "./port";
+
+const MAX_CHANGED_FILES = 10;
+const MAX_CHANGED_LINES = 500;
 
 export class CommitReminder {
   constructor(
@@ -6,9 +10,11 @@ export class CommitReminder {
     private readonly decisionPresenter: StopDecisionPresenter,
   ) {}
 
-  async execute(): Promise<void> {
-    const MAX_CHANGED_FILES = 10;
-    const MAX_CHANGED_LINES = 500;
+  async execute(input: StopHookInput): Promise<void> {
+    if (input.stopHookActive) {
+      await this.decisionPresenter.allow();
+      return;
+    }
 
     const isGitAvailable = await this.gitService.isAvailable();
     if (!isGitAvailable) {
