@@ -6,6 +6,9 @@
   "bin": {
     "ccharness": "./dist/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rolldown -c rolldown.config.ts",
     "test": "vitest --run"
