@@ -4,15 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-CCharness is a lightweight harness for Claude Code, built with TypeScript and designed to be a CLI tool that provides hooks and utilities for Claude Code operations.
+CCharness is a lightweight harness for Claude Code, built with TypeScript and designed to be a CLI tool that provides hooks and utilities for Claude Code operations. It intercepts and processes Claude Code hook events to provide additional functionality like commit reminders and decision handling.
 
 ## Tech Stack
 
-- **Language**: TypeScript with ESM modules
+- **Language**: TypeScript 5.9+ with ESM modules
 - **Build Tool**: Rolldown (v1.0.0-beta.34, Rust-based bundler)
 - **Test Framework**: Vitest
 - **Package Manager**: pnpm (v10.13.1)
 - **CLI Framework**: Commander.js (v14)
+- **Dependency Injection**: tsyringe with reflect-metadata
+- **Code Formatting**: Prettier (v3.6.2)
 
 ## Common Commands
 
@@ -20,7 +22,7 @@ CCharness is a lightweight harness for Claude Code, built with TypeScript and de
 # Install dependencies
 pnpm install
 
-# Build the project
+# Build the project (creates dist/index.js)
 pnpm build
 # or: rolldown -c rolldown.config.ts
 
@@ -30,37 +32,143 @@ pnpm test
 
 # Run tests in watch mode
 vitest
+
+# Format code
+npx prettier --write .
+
+# Check formatting
+npx prettier --check .
+
+# Run a specific test file
+vitest path/to/test.spec.ts
+
+# Run tests with coverage
+vitest --coverage
 ```
 
 ## Architecture
 
-The project follows Clean Architecture principles with clear separation of concerns:
+The project follows Clean Architecture principles with clear separation of concerns and dependency inversion:
 
-### Directory Structure
-- `src/main.ts` - CLI entry point with shebang, defines Commander.js commands
-- `src/handlers/` - Command handler functions organized by command hierarchy
-  - `hook/commit.ts` - Example: handler for `ccharness hook commit` command
+### Layer Structure
 
-### Command Pattern
-Commands are structured hierarchically using Commander.js:
-```typescript
-// Main command -> subcommand -> nested command
-// Example: ccharness hook commit
-const hook = program.command('hook')
-hook.command('commit').action(commitAction)
+```
+src/
+├── main.ts           # CLI entry point with shebang (#!/usr/bin/env node)
+├── handlers/         # Command handlers (entry points)
+│   └── hook/        # Hook-related command handlers
+├── usecases/        # Core business logic (framework-agnostic)
+│   ├── interface.ts # Domain interfaces with DI symbols
+│   └── port.ts      # Data transfer types for external inputs
+├── services/        # External system integrations
+│   ├── CmdGitService.ts      # Git operations via CLI
+│   └── StdinHookService.ts   # Parse Claude Code hook JSON input
+└── presenters/      # Output formatting for Claude Code
+    ├── ConsoleDecisionPresenter.ts      # Base presenter
+    └── ConsoleStopDecisionPresenter.ts  # Stop hook decision output
 ```
 
-Handler functions are exported from separate files for better organization.
+### Dependency Injection Pattern
+
+The project uses tsyringe for dependency injection with interface symbols:
+
+1. **Interface Definition** (in `usecases/interface.ts`):
+   ```typescript
+   export const IGitService = Symbol("IGitService");
+   export interface GitService { ... }
+   ```
+
+2. **Implementation** (in `services/`):
+   ```typescript
+   @injectable()
+   export class CmdGitService implements GitService { ... }
+   ```
+
+3. **Usage in Handlers** (in `handlers/`):
+   ```typescript
+   const gitService = container.resolve(CmdGitService);
+   ```
+
+### Hook Input Processing
+
+The system processes Claude Code hook events via stdin:
+- `StdinHookService` reads JSON from stdin
+- Automatically converts snake_case to camelCase
+- Provides typed interfaces via `port.ts`
+- Hook input includes: `sessionId`, `transcriptPath`, `cwd`, `hookEventName`, `stopHookActive`
+
+### Command Structure
+
+Commands follow a hierarchical pattern using Commander.js:
+```
+ccharness [command] [subcommand] [options]
+└── hook                    # Hook-related commands
+    └── commit             # Commit reminder hook
+```
+
+### Use Case Layer Rules
+
+**IMPORTANT**: Use cases in `src/usecases/` must be:
+- Plain TypeScript/JavaScript classes
+- No framework dependencies
+- No decorators (`@injectable`, etc.)
+- Receive dependencies via constructor injection
+- Focus purely on business logic
+
+### Presenter Output Format
+
+Presenters output structured JSON for Claude Code to interpret:
+```json
+{
+  "decision": "block" | undefined,
+  "reason": "string"
+}
+```
 
 ### TypeScript Configuration
 
-- Strict mode with additional checks: `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`
-- Module system: NodeNext with ESM
-- Path alias: `@/*` maps to `./src/*`
-- No emit (build handled by Rolldown)
-- Bundler module resolution for compatibility
+- **Strict Mode**: Full strict checking enabled
+- **Additional Checks**: `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`
+- **Module System**: NodeNext with ESM
+- **Path Alias**: `@/*` maps to `./src/*`
+- **No Emit**: TypeScript doesn't emit files (handled by Rolldown)
+- **Module Resolution**: Bundler mode for compatibility
 
-### Build Output
+### Build Configuration
 
-- Single bundled ESM file at `dist/index.js` with executable shebang
-- Binary exposed as `ccharness` command when installed via npm/pnpm
+Rolldown bundles the entire application into a single ESM file:
+- **Input**: `src/main.ts`
+- **Output**: `dist/index.js` with executable shebang
+- **Platform**: Node.js
+- **Binary**: Exposed as `ccharness` command via package.json bin field
+
+## Development Workflow
+
+1. **Adding a New Command**:
+   - Create handler in `src/handlers/[category]/[command].ts`
+   - Register command in `src/main.ts` using Commander
+   - Implement use case in `src/usecases/` (no decorators)
+   - Add services/presenters as needed with `@injectable()`
+
+2. **Adding a New Service**:
+   - Define interface in `src/usecases/interface.ts` with Symbol
+   - Implement in `src/services/` with `@injectable()` decorator
+   - Use via `container.resolve()` in handlers
+
+3. **Processing Hook Input**:
+   - Define input types in `src/usecases/port.ts`
+   - Use `StdinHookService` to parse JSON input
+   - Handle `stopHookActive` flag for stop hook behavior
+
+4. **Testing**:
+   - Place test files alongside source files with `.spec.ts` or `.test.ts` extension
+   - Use Vitest for unit and integration tests
+   - Mock external dependencies using DI container
+
+## Key Design Decisions
+
+- **Clean Architecture**: Ensures business logic remains independent of frameworks and external systems
+- **Dependency Injection**: Enables easy testing and swapping of implementations
+- **Single Bundle Output**: Simplifies distribution as a CLI tool
+- **Hook Input Processing**: Standardizes handling of Claude Code hook events
+- **Presenter Pattern**: Provides structured output format for Claude Code integration
