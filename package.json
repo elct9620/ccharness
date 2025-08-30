@@ -1,6 +1,6 @@
 {
   "name": "@aotoki/ccharness",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A lightweight harness for Claude Code",
   "type": "module",
   "bin": {
