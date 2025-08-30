@@ -37,6 +37,7 @@ export class CommitReminder {
     const untrackedLines = await this.gitService.countUntrackedLines();
 
     const state = await this.stateBuilder
+      .useConfigFile()
       .withMaxFiles(input.options.maxFiles)
       .withMaxLines(input.options.maxLines)
       .withChangedFiles(changedFiles)

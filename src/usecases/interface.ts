@@ -11,6 +11,7 @@ export interface GitService {
 export const IWorkingStateBuilder = Symbol("IWorkingStateBuilder");
 export interface WorkingStateBuilder {
   build(): Promise<WorkingState>;
+  useConfigFile(): WorkingStateBuilder;
   withMaxFiles(maxFiles: number): WorkingStateBuilder;
   withMaxLines(maxLines: number): WorkingStateBuilder;
   withChangedFiles(changedFiles: number): WorkingStateBuilder;

@@ -1,5 +1,16 @@
+import { readFile } from "fs/promises";
+
 import { WorkingState } from "@/entities/WorkingState";
 import type { WorkingStateBuilder } from "@/usecases/interface";
+
+const CONFIG_PATH = "ccharness.json";
+
+type ConfigSchema = {
+  commit: {
+    maxFiles: number;
+    maxLines: number;
+  };
+};
 
 export class JsonWorkingStateBuilder implements WorkingStateBuilder {
   private maxFiles: number | null = null;
@@ -9,7 +20,12 @@ export class JsonWorkingStateBuilder implements WorkingStateBuilder {
   private changedLines: number = 0;
   private untrackedLines: number = 0;
 
-  constructor() {}
+  private isLoadedFromConfig = false;
+
+  useConfigFile(): WorkingStateBuilder {
+    this.isLoadedFromConfig = true;
+    return this;
+  }
 
   withMaxFiles(maxFiles: number): WorkingStateBuilder {
     this.maxFiles = maxFiles;
@@ -37,6 +53,24 @@ export class JsonWorkingStateBuilder implements WorkingStateBuilder {
   }
 
   async build() {
+    const rootDir = process.env.CLAUDE_PROJECT_DIR || process.cwd();
+    const configFilePath = `${rootDir}/${CONFIG_PATH}`;
+
+    if (this.isLoadedFromConfig) {
+      try {
+        const fileContent = await readFile(configFilePath, "utf-8");
+        const config: ConfigSchema = JSON.parse(fileContent);
+        if (this.maxFiles === null || this.maxFiles < 0) {
+          this.maxFiles = config.commit.maxFiles;
+        }
+        if (this.maxLines === null || this.maxLines < 0) {
+          this.maxLines = config.commit.maxLines;
+        }
+      } catch (error) {
+        // Ignore if the config file does not exist or is invalid
+      }
+    }
+
     return new WorkingState(
       this.maxFiles ?? -1,
       this.maxLines ?? -1,
