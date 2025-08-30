@@ -17,13 +17,13 @@ export class WorkingState {
   }
 
   get isExceededMaxFiles(): boolean {
-    return this.maxFiles >= 0 && this._changedFiles > this.maxFiles;
+    return this.maxFiles >= 0 && this._changedFiles >= this.maxFiles;
   }
 
   get isExceededMaxLines(): boolean {
     return (
       this.maxLines >= 0 &&
-      this._changedLines + this._untrackedLines > this.maxLines
+      this._changedLines + this._untrackedLines >= this.maxLines
     );
   }
 
