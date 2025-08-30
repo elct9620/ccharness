@@ -7,7 +7,7 @@
     "ccharness": "./dist/index.js"
   },
   "scripts": {
-    "build": "rolldown src/main.ts --file dist/index.js",
+    "build": "rolldown -c rolldown.config.ts",
     "test": "vitest --run"
   },
   "keywords": [
@@ -17,8 +17,12 @@
   "license": "MIT",
   "packageManager": "pnpm@10.13.1",
   "devDependencies": {
+    "@types/node": "^24.3.0",
     "rolldown": "1.0.0-beta.34",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "commander": "^14.0.0"
   }
 }

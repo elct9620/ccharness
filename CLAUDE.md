@@ -48,3 +48,10 @@ vitest
 ## Build System
 
 Uses Rolldown (a Rust-based bundler, currently in beta) for building the TypeScript code into a single JavaScript file suitable for CLI usage.
+
+## Architecture
+
+This is a CLI tool built with Commander.js for command parsing. The architecture follows a simple structure:
+- Entry point at `src/main.ts` with shebang for direct execution
+- Commander.js handles CLI command definition and parsing
+- Built as a single bundled ESM module for distribution
