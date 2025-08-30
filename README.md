@@ -55,7 +55,7 @@ Options:
 
 The most config can use `ccharness.json` in project root to customize the behavior.
 
-```
+```json
 {
   "commit": {
     "maxFiles": 10,

@@ -1,4 +1,5 @@
 import { readFile } from "fs/promises";
+import { injectable } from "tsyringe";
 
 import { WorkingState } from "@/entities/WorkingState";
 import type { WorkingStateBuilder } from "@/usecases/interface";
@@ -12,6 +13,7 @@ type ConfigSchema = {
   };
 };
 
+@injectable()
 export class JsonWorkingStateBuilder implements WorkingStateBuilder {
   private maxFiles: number | null = null;
   private maxLines: number | null = null;

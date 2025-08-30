@@ -44,6 +44,11 @@ vitest path/to/test.spec.ts
 
 # Run tests with coverage
 vitest --coverage
+
+# Test the CLI locally after build
+node dist/index.js hook commit --help
+# or using npx with the current directory
+npx . hook commit
 ```
 
 ## Architecture
@@ -60,9 +65,12 @@ src/
 ├── usecases/        # Core business logic (framework-agnostic)
 │   ├── interface.ts # Domain interfaces with DI symbols
 │   └── port.ts      # Data transfer types for external inputs
+├── entities/        # Domain entities
+│   └── WorkingState.ts       # Git working directory state model
 ├── services/        # External system integrations
 │   ├── CmdGitService.ts      # Git operations via CLI
-│   └── StdinHookService.ts   # Parse Claude Code hook JSON input
+│   ├── StdinHookService.ts   # Parse Claude Code hook JSON input
+│   └── JsonWorkingStateBuilder.ts # Config-aware state builder
 └── presenters/      # Output formatting for Claude Code
     ├── ConsoleDecisionPresenter.ts      # Base presenter
     └── ConsoleStopDecisionPresenter.ts  # Stop hook decision output
@@ -96,6 +104,13 @@ The system processes Claude Code hook events via stdin:
 - Automatically converts snake_case to camelCase
 - Provides typed interfaces via `port.ts`
 - Hook input includes: `sessionId`, `transcriptPath`, `cwd`, `hookEventName`, `stopHookActive`
+
+### Environment Variables
+
+- `CLAUDE_PROJECT_DIR`: Set by Claude Code to specify the project root directory
+  - Used by `CmdGitService` for Git operations
+  - Used by `JsonWorkingStateBuilder` for config file resolution
+  - Falls back to `process.cwd()` when not set (e.g., during local testing)
 
 ### Command Structure
 
@@ -165,6 +180,24 @@ Rolldown bundles the entire application into a single ESM file:
    - Use Vitest for unit and integration tests
    - Mock external dependencies using DI container
 
+## Configuration
+
+The project supports a `ccharness.json` configuration file in the project root:
+
+```json
+{
+  "commit": {
+    "maxFiles": 10,     // Trigger reminder when files changed >= this value
+    "maxLines": 500     // Trigger reminder when lines changed >= this value
+  }
+}
+```
+
+Configuration precedence:
+1. CLI options (`--max-files`, `--max-lines`)
+2. `ccharness.json` file (if CLI options are `-1` or not provided)
+3. Default value of `-1` (disabled)
+
 ## Key Design Decisions
 
 - **Clean Architecture**: Ensures business logic remains independent of frameworks and external systems
@@ -172,3 +205,4 @@ Rolldown bundles the entire application into a single ESM file:
 - **Single Bundle Output**: Simplifies distribution as a CLI tool
 - **Hook Input Processing**: Standardizes handling of Claude Code hook events
 - **Presenter Pattern**: Provides structured output format for Claude Code integration
+- **Builder Pattern**: `JsonWorkingStateBuilder` for flexible state construction with config support
