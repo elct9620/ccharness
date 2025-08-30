@@ -29,6 +29,8 @@
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
     "noEmit": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
 
     // Alias
     "baseUrl": ".",

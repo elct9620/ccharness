@@ -24,6 +24,8 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "commander": "^14.0.0"
+    "@abraham/reflection": "^0.13.0",
+    "commander": "^14.0.0",
+    "tsyringe": "^4.10.0"
   }
 }

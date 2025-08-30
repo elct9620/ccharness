@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import "@abraham/reflection";
 import { Command } from "commander";
 
 import { commitAction } from "@/handlers/hook/commit";
