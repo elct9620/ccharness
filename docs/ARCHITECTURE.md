@@ -23,7 +23,7 @@ Example service interface:
 ```typescript
 // src/services/gitService.ts
 
-import { GitService } from '@/usecases/ports'
+import { GitService } from '@/usecases/interface'
 
 @injectable()
 export class CmdGitService implements GitService {
@@ -42,7 +42,7 @@ Example use case:
 ```typescript
 // src/usecases/CommitReminderCommand.ts
 
-import { GitService } from '@/usecases/ports'
+import { GitService } from './interface'
 
 export class CommitReminderCommand {
   constructor(private gitService: GitService) {}
