@@ -1,0 +1,24 @@
+{
+  "name": "ccharness",
+  "version": "1.0.0",
+  "description": "A lightweight harness for Claude Code",
+  "type": "module",
+  "bin": {
+    "ccharness": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "rolldown src/main.ts --file dist/index.js",
+    "test": "vitest --run"
+  },
+  "keywords": [
+    "Claude Code"
+  ],
+  "author": "Aotokitsuruya",
+  "license": "MIT",
+  "packageManager": "pnpm@10.13.1",
+  "devDependencies": {
+    "rolldown": "1.0.0-beta.34",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}
