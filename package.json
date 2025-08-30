@@ -3,9 +3,7 @@
   "version": "0.1.2",
   "description": "A lightweight harness for Claude Code",
   "type": "module",
-  "bin": {
-    "ccharness": "./dist/index.js"
-  },
+  "bin": "dist/index.js",
   "files": [
     "dist"
   ],
