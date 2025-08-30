@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.4](https://github.com/elct9620/ccharness/compare/v0.1.3...v0.1.4) (2025-08-30)
+
+
+### Bug Fixes
+
+* add missing [@injectable](https://github.com/injectable) decorator to JsonWorkingStateBuilder ([78ef106](https://github.com/elct9620/ccharness/commit/78ef10614a46cba40a07246e60734f521b16a0a7))
+* correct threshold comparison logic in WorkingState ([c173bf8](https://github.com/elct9620/ccharness/commit/c173bf8130a5033b3741220a265df9cd1097c28f))
+
 ## [0.1.3](https://github.com/elct9620/ccharness/compare/v0.1.2...v0.1.3) (2025-08-30)
 
 ### Bug Fixes
