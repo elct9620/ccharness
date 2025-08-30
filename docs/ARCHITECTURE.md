@@ -10,6 +10,7 @@ The `ccharness` project is following Clean Architecture principles, which emphas
 |- src/
    |- main.ts   # Application entry point
    |- handlers/ # Entry points for command handlers
+   |- presenters/ # Interfaces for output or presentation logic
    |- usecases/ # The application business logic
    |- services/ # Interfaces to external systems
 ```
@@ -68,5 +69,27 @@ export async function commitAction() {
     const gitService = container.resolve<GitService>(CmdGitService)
     const command = new CommitReminderCommand(gitService)
     await command.execute()
+}
+```
+
+## Presenter
+
+The `presenters` directory contains interfaces and implementations for output or presentation logic. By the default, the output is displayed for Claude Code to provide context for the agent.
+
+Example presenter interface:
+
+```typescript
+// src/presenters/ConsoleStopDecisionPresenter.ts
+import { StopDecisionPresenter } from '@/usecases/interface'
+
+@injectable()
+export class ConsoleStopDecisionPresenter implements StopDecisionPresenter extends ConsoleDecisionPresenter {
+    async allow(reason?: string): void {
+        return this.render({ decision: undefined, reason: reason || '' })
+    }
+
+    async block(reason: string): void {
+        return this.render({ decision: 'block', reason })
+    }
 }
 ```

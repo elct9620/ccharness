@@ -1,3 +1,4 @@
+import { ConsoleStopDecisionPresenter } from "@/presenters/ConsoleStopDecisionPresenter";
 import { CmdGitService } from "@/services/CmdGitService";
 import { container } from "tsyringe";
 
@@ -6,8 +7,11 @@ const MAX_CHANGED_LINES = 500;
 
 export async function commitAction() {
   const gitService = container.resolve(CmdGitService);
+  const decisionPresenter = container.resolve(ConsoleStopDecisionPresenter);
+
   const isGitAvailable = await gitService.isAvailable();
   if (!isGitAvailable) {
+    decisionPresenter.allow();
     return;
   }
 
@@ -17,6 +21,7 @@ export async function commitAction() {
 
   const hasChanges = changedFiles > 0 || changedLines > 0 || untrackedLines > 0;
   if (!hasChanges) {
+    decisionPresenter.allow();
     return;
   }
 
@@ -35,13 +40,9 @@ export async function commitAction() {
   }
 
   if (reason.length === 0) {
+    decisionPresenter.allow();
     return;
   }
 
-  console.log(
-    JSON.stringify({
-      decision: "block",
-      reason: reason,
-    }),
-  );
+  decisionPresenter.block(reason);
 }
