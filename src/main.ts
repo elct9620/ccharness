@@ -8,4 +8,12 @@ program.name('ccharness')
   .description('A lightweight harness for Claude Code')
   .version('0.1.0');
 
+const hook = program.command('hook').description('The hooks for Claude Code');
+hook
+  .command('commit')
+  .description('Ensure the agent commit frequently according to the throttle limit')
+  .action(() => {
+  console.log('TODO: Commit when agent is stopped');
+});
+
 program.parse()
