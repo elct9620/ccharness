@@ -4,6 +4,7 @@ import "@abraham/reflection";
 import { Command } from "commander";
 
 import { guardCommitAction } from "@/handlers/hook/GuardCommit";
+import { reviewReminderAction } from "./handlers/hook/ReviewReminder";
 
 const program = new Command();
 
@@ -29,5 +30,10 @@ hook
     "Ensure the agent commit frequently according to the throttle limit",
   )
   .action(guardCommitAction);
+
+hook
+  .command("review-reminder")
+  .description("Add additional context to reminders to review code after edits")
+  .action(reviewReminderAction);
 
 await program.parseAsync(process.argv);

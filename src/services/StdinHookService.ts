@@ -3,7 +3,7 @@ import { injectable } from "tsyringe";
 
 @injectable()
 export class StdinHookService {
-  async parse(): Promise<HookInput> {
+  async parse<T extends HookInput>(): Promise<T> {
     return new Promise((resolve, reject) => {
       let input = "";
       process.stdin.setEncoding("utf-8");
@@ -13,7 +13,7 @@ export class StdinHookService {
       process.stdin.on("end", () => {
         try {
           const data = JSON.parse(input);
-          resolve(this.convertSnakeToCamel(data) as HookInput);
+          resolve(this.convertSnakeToCamel(data) as T);
         } catch (error) {
           reject(error);
         }

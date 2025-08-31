@@ -9,4 +9,16 @@ export type StopHookInput = SharedHookInput & {
   stopHookActive: boolean;
 };
 
-export type HookInput = StopHookInput;
+export type PreToolUseHookInput = SharedHookInput & {
+  toolName: string;
+  toolInput: Record<string, any>;
+};
+
+export type PostToolUseHookInput = PreToolUseHookInput & {
+  toolResponse: Record<string, any>;
+};
+
+export type HookInput =
+  | StopHookInput
+  | PreToolUseHookInput
+  | PostToolUseHookInput;

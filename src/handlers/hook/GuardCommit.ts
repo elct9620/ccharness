@@ -3,6 +3,7 @@ import { CmdGitService } from "@/services/CmdGitService";
 import { JsonWorkingStateBuilder } from "@/services/JsonWorkingStateBuilder";
 import { StdinHookService } from "@/services/StdinHookService";
 import { GuardCommit } from "@/usecases/GuardCommit";
+import type { StopHookInput } from "@/usecases/port";
 import { container } from "tsyringe";
 
 type GuardCommitOptions = {
@@ -16,7 +17,7 @@ export async function guardCommitAction(options: GuardCommitOptions) {
   const configBuilder = container.resolve(JsonWorkingStateBuilder);
   const decisionPresenter = container.resolve(ConsoleStopDecisionPresenter);
 
-  const hook = await stdinHookService.parse();
+  const hook = await stdinHookService.parse<StopHookInput>();
 
   const guardCommit = new GuardCommit(
     gitService,
