@@ -47,8 +47,18 @@ npx -y @aotoki/ccharness hook guard-commit
 
 Options:
 
-- `-f`, `--max-files <number>`: When exceeding the number of changed files, ask Claude to commit. Default is `-1` (disabled).
-- `-l`, `--max-lines <number>`: When exceeding the number of changed lines, ask Claude to commit. Default is `-1` (disabled).
+- `-f`, `--max-files <number>`: When exceeding the number of changed files, ask Claude Code to commit. Default is `-1` (disabled).
+- `-l`, `--max-lines <number>`: When exceeding the number of changed lines, ask Claude Code to commit. Default is `-1` (disabled).
+
+### Review Reminder (Experimental)
+
+A `PostToolUse` hook for `Write`, `Edit`, `MultiEdit` tool to remind Claude Code to review with rubric(s).
+
+```bash
+npx -y @aotoki/ccharness hook review-reminder
+```
+
+> Currently, we only add context to remind agent we have rubric document, and use it to review the changes.
 
 ## Configuration
 
@@ -59,6 +69,13 @@ The most config can use `ccharness.json` in project root to customize the behavi
   "commit": {
     "maxFiles": 10,
     "maxLines": 500
-  }
+  },
+  "rubrics": [
+    {
+      "name": "vitest",
+      "pattern": "test/.*\\.test\\.ts$",
+      "path": "docs/rubrics/vitest.md"
+    }
+  ]
 }
 ```
