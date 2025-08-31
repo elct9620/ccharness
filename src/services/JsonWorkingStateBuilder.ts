@@ -1,9 +1,9 @@
-import { readFile } from "fs/promises";
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 
-import { CONFIG_FILE_NAME, type ConfigSchema } from "@/constant";
+import { type ConfigSchema } from "@/constant";
 import { WorkingState } from "@/entities/WorkingState";
 import type { WorkingStateBuilder } from "@/usecases/interface";
+import { JsonConfigService } from "./JsonConfigService";
 
 @injectable()
 export class JsonWorkingStateBuilder implements WorkingStateBuilder {
@@ -15,6 +15,10 @@ export class JsonWorkingStateBuilder implements WorkingStateBuilder {
   private untrackedLines: number = 0;
 
   private isLoadedFromConfig = false;
+
+  constructor(
+    @inject(JsonConfigService) private configService: JsonConfigService,
+  ) {}
 
   useConfigFile(): WorkingStateBuilder {
     this.isLoadedFromConfig = true;
@@ -47,21 +51,13 @@ export class JsonWorkingStateBuilder implements WorkingStateBuilder {
   }
 
   async build() {
-    const rootDir = process.env.CLAUDE_PROJECT_DIR || process.cwd();
-    const configFilePath = `${rootDir}/${CONFIG_FILE_NAME}`;
-
     if (this.isLoadedFromConfig) {
-      try {
-        const fileContent = await readFile(configFilePath, "utf-8");
-        const config: ConfigSchema = JSON.parse(fileContent);
-        if (this.maxFiles === null || this.maxFiles < 0) {
-          this.maxFiles = config.commit.maxFiles;
-        }
-        if (this.maxLines === null || this.maxLines < 0) {
-          this.maxLines = config.commit.maxLines;
-        }
-      } catch (error) {
-        // Ignore if the config file does not exist or is invalid
+      const config: ConfigSchema = await this.configService.load();
+      if (this.maxFiles === null || this.maxFiles < 0) {
+        this.maxFiles = config.commit.maxFiles;
+      }
+      if (this.maxLines === null || this.maxLines < 0) {
+        this.maxLines = config.commit.maxLines;
       }
     }
 
