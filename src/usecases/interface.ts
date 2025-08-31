@@ -26,6 +26,14 @@ export interface StopDecisionPresenter {
   block(reason: string): Promise<void>;
 }
 
+export const IPostToolUseDecisionPresenter = Symbol(
+  "IPostToolUseDecisionPresenter",
+);
+export interface PostToolUseDecisionPresenter {
+  allow(context?: string): Promise<void>;
+  block(reason: string, context?: string): Promise<void>;
+}
+
 export const IRubricRepository = Symbol("IRubricRepository");
 export interface RubricRepository {
   matches(path: string): Promise<Rubric[]>;
