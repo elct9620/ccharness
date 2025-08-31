@@ -1,10 +1,9 @@
 import { readFile } from "fs/promises";
 import { injectable } from "tsyringe";
 
+import { CONFIG_FILE_NAME } from "@/constant";
 import { WorkingState } from "@/entities/WorkingState";
 import type { WorkingStateBuilder } from "@/usecases/interface";
-
-const CONFIG_PATH = "ccharness.json";
 
 type ConfigSchema = {
   commit: {
@@ -56,7 +55,7 @@ export class JsonWorkingStateBuilder implements WorkingStateBuilder {
 
   async build() {
     const rootDir = process.env.CLAUDE_PROJECT_DIR || process.cwd();
-    const configFilePath = `${rootDir}/${CONFIG_PATH}`;
+    const configFilePath = `${rootDir}/${CONFIG_FILE_NAME}`;
 
     if (this.isLoadedFromConfig) {
       try {
