@@ -1,16 +1,9 @@
 import { readFile } from "fs/promises";
 import { injectable } from "tsyringe";
 
-import { CONFIG_FILE_NAME } from "@/constant";
+import { CONFIG_FILE_NAME, type ConfigSchema } from "@/constant";
 import { WorkingState } from "@/entities/WorkingState";
 import type { WorkingStateBuilder } from "@/usecases/interface";
-
-type ConfigSchema = {
-  commit: {
-    maxFiles: number;
-    maxLines: number;
-  };
-};
 
 @injectable()
 export class JsonWorkingStateBuilder implements WorkingStateBuilder {

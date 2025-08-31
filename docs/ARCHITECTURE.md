@@ -12,6 +12,7 @@ The `ccharness` project is following Clean Architecture principles, which emphas
    |- entities/ # Core business entities
    |- usecases/ # The application business logic
    |- handlers/ # Entry points for command handlers
+   |- repositories/ # Interfaces for data access
    |- presenters/ # Interfaces for output or presentation logic
    |- services/ # Interfaces to external systems
 ```
@@ -97,6 +98,22 @@ export async function commitAction() {
   const gitService = container.resolve<GitService>(CmdGitService);
   const command = new CommitReminderCommand(gitService);
   await command.execute();
+}
+```
+
+## Repository
+
+The `repositories` directory contains interfaces for data access. This layer abstracts the data storage and retrieval mechanisms, allowing the application to interact with different data sources without being tightly coupled to them.
+
+Example repository interface:
+
+```typescript
+// src/repositories/JsonRubicReRepository.ts
+import { RubricRepository } from "@/usecases/interface";
+
+@injectable()
+export class JsonRubicReRepository implements RubricRepository {
+  // Implementation of RubricRepository methods
 }
 ```
 

@@ -1,3 +1,4 @@
+import type { Rubric } from "@/entities/Rubric";
 import type { WorkingState } from "@/entities/WorkingState";
 
 export const IGitService = Symbol("IGitService");
@@ -23,4 +24,9 @@ export const IStopDicisionPresenter = Symbol("IStopDicisionPresenter");
 export interface StopDecisionPresenter {
   allow(reason?: string): Promise<void>;
   block(reason: string): Promise<void>;
+}
+
+export const IRubricRepository = Symbol("IRubricRepository");
+export interface RubricRepository {
+  matches(path: string): Promise<Rubric[]>;
 }
