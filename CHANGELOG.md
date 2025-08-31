@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0](https://github.com/elct9620/ccharness/compare/v0.1.4...v0.2.0) (2025-08-31)
+
+
+### Features
+
+* add review-reminder hook for post-tool-use events ([27eb6f3](https://github.com/elct9620/ccharness/commit/27eb6f372538194bb450105e60dc72a425b451a9))
+* implement rubric-based review reminders ([4fad860](https://github.com/elct9620/ccharness/commit/4fad860fef70852cce601ba3fa74bb9c697e34b6))
+
 ## [0.1.4](https://github.com/elct9620/ccharness/compare/v0.1.3...v0.1.4) (2025-08-30)
 
 
