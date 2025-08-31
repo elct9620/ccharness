@@ -4,6 +4,7 @@ import "@abraham/reflection";
 import { Command } from "commander";
 
 import { guardCommitAction } from "@/handlers/hook/GuardCommit";
+import "./container";
 import { reviewReminderAction } from "./handlers/hook/ReviewReminder";
 
 const program = new Command();

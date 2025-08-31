@@ -1,7 +1,8 @@
-import { injectable } from "tsyringe";
-
-import type { ConfigSchema } from "@/constant";
 import { readFile } from "fs/promises";
+import { inject, injectable } from "tsyringe";
+
+import { CONFIG_FILE_NAME, type ConfigSchema } from "@/constant";
+import { IProjectRoot } from "@/container";
 
 const defaultConfig: ConfigSchema = {
   commit: {
@@ -15,16 +16,19 @@ const defaultConfig: ConfigSchema = {
 export class JsonConfigService {
   private _cache: ConfigSchema | null = null;
 
+  constructor(@inject(IProjectRoot) private readonly rootDir: string) {}
+
+  get configFilePath(): string {
+    return `${this.rootDir}/${CONFIG_FILE_NAME}`;
+  }
+
   async load(): Promise<ConfigSchema> {
     if (this._cache) {
       return this._cache;
     }
 
-    const rootDir = process.env.CLAUDE_PROJECT_DIR || process.cwd();
-    const configFilePath = `${rootDir}/ccharness.json`;
-
     try {
-      const content = await readFile(configFilePath, "utf-8");
+      const content = await readFile(this.configFilePath, "utf-8");
       const config: ConfigSchema = JSON.parse(content);
 
       this._cache = this.deepMerge(defaultConfig, config);
