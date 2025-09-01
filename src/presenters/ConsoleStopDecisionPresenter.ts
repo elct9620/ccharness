@@ -1,5 +1,6 @@
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 
+import { IConsole } from "@/container";
 import type { StopDecisionPresenter } from "@/usecases/interface";
 import { ConsoleDecisionPresenter } from "./ConsoleDecisionPresenter";
 
@@ -8,6 +9,10 @@ export class ConsoleStopDecisionPresenter
   extends ConsoleDecisionPresenter
   implements StopDecisionPresenter
 {
+  constructor(@inject(IConsole) console: Console) {
+    super(console);
+  }
+
   async allow(reason?: string): Promise<void> {
     this.render({
       decision: undefined,
