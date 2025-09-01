@@ -74,7 +74,7 @@ src/
 │   └── Rubric.ts             # Code review rubric model
 ├── services/                  # External system integrations
 │   ├── CmdGitService.ts      # Git operations via CLI
-│   ├── StdinHookService.ts   # Parse Claude Code hook JSON input
+│   ├── ReadHookInputService.ts # Parse Claude Code hook JSON input
 │   ├── JsonConfigService.ts  # Configuration file loader
 │   └── JsonWorkingStateBuilder.ts # Config-aware state builder
 ├── repositories/              # Data access layer
@@ -109,7 +109,7 @@ The project uses tsyringe for dependency injection with interface symbols:
 ### Hook Input Processing
 
 The system processes Claude Code hook events via stdin:
-- `StdinHookService` reads JSON from stdin
+- `ReadHookInputService` reads JSON from stdin
 - Automatically converts snake_case to camelCase
 - Provides typed interfaces via `port.ts`
 - Stop hook input: `sessionId`, `transcriptPath`, `cwd`, `hookEventName`, `stopHookActive`
@@ -194,7 +194,7 @@ Rolldown bundles the entire application into a single ESM file:
 
 3. **Processing Hook Input**:
    - Define input types in `src/usecases/port.ts`
-   - Use `StdinHookService` to parse JSON input
+   - Use `ReadHookInputService` to parse JSON input
    - Handle hook-specific fields (e.g., `stopHookActive`, `toolName`)
 
 4. **Testing**:

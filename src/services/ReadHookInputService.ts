@@ -1,16 +1,22 @@
+import { IHookInputStream } from "@/container";
 import type { HookInput } from "@/usecases/port";
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class StdinHookService {
+export class ReadHookInputService {
+  constructor(
+    @inject(IHookInputStream)
+    private readonly inputStream: NodeJS.ReadableStream,
+  ) {}
+
   async parse<T extends HookInput>(): Promise<T> {
     return new Promise((resolve, reject) => {
       let input = "";
-      process.stdin.setEncoding("utf-8");
-      process.stdin.on("data", (chunk) => {
+      this.inputStream.setEncoding("utf-8");
+      this.inputStream.on("data", (chunk) => {
         input += chunk;
       });
-      process.stdin.on("end", () => {
+      this.inputStream.on("end", () => {
         try {
           const data = JSON.parse(input);
           resolve(this.convertSnakeToCamel(data) as T);
@@ -19,7 +25,7 @@ export class StdinHookService {
         }
       });
 
-      process.stdin.on("error", (error) => {
+      this.inputStream.on("error", (error) => {
         reject(error);
       });
     });
