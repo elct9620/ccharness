@@ -60,6 +60,8 @@ The project follows Clean Architecture principles with clear separation of conce
 ```
 src/
 ├── main.ts                    # CLI entry point with shebang (#!/usr/bin/env node)
+├── token.ts                   # DI token symbols (IProjectRoot, IHookInputStream, IConsole, IConfigService)
+├── constant.ts                # Shared constants and types (ConfigSchema, CommandOptions)
 ├── handlers/                  # Command handlers (entry points)
 │   └── hook/                 # Hook-related command handlers
 │       ├── GuardCommit.ts    # Stop hook for commit reminders
@@ -89,21 +91,31 @@ src/
 
 The project uses tsyringe for dependency injection with interface symbols:
 
-1. **Interface Definition** (in `usecases/interface.ts`):
+1. **Token Definition** (in `src/token.ts`):
+   ```typescript
+   export const IConfigService = Symbol("IConfigService");
+   export const IHookInputStream = Symbol("IHookInputStream");
+   ```
+
+2. **Interface Definition** (in `src/usecases/interface.ts`):
    ```typescript
    export const IGitService = Symbol("IGitService");
    export interface GitService { ... }
    ```
 
-2. **Implementation** (in `services/` or `repositories/`):
+3. **Implementation** (in `services/` or `repositories/`):
    ```typescript
    @injectable()
    export class CmdGitService implements GitService { ... }
    ```
 
-3. **Usage in Handlers** (in `handlers/`):
+4. **Registration and Usage in Handlers**:
    ```typescript
-   const gitService = container.resolve(CmdGitService);
+   // Register implementation
+   container.register(IGitService, { useClass: CmdGitService });
+   
+   // Resolve and use
+   const gitService = container.resolve<GitService>(IGitService);
    ```
 
 ### Hook Input Processing
@@ -198,9 +210,10 @@ Rolldown bundles the entire application into a single ESM file:
    - Handle hook-specific fields (e.g., `stopHookActive`, `toolName`)
 
 4. **Testing**:
-   - Place test files alongside source files with `.spec.ts` or `.test.ts` extension
+   - Test files use `.test.ts` extension in the `tests/` directory mirroring source structure
    - Use Vitest for unit and integration tests
-   - Mock external dependencies using DI container
+   - Test helpers follow step pattern (e.g., `givenHookInput`, `thenHookOutputShouldBe`)
+   - Mock external dependencies using DI container registration
 
 ## Configuration
 
@@ -239,8 +252,9 @@ Adds context to remind Claude Code to review changes against configured rubrics 
 
 - **Clean Architecture**: Ensures business logic remains independent of frameworks and external systems
 - **Dependency Injection**: Enables easy testing and swapping of implementations
-- **Single Bundle Output**: Simplifies distribution as a CLI tool
-- **Hook Input Processing**: Standardizes handling of Claude Code hook events
-- **Presenter Pattern**: Provides structured output format for Claude Code integration
+- **Single Bundle Output**: Simplifies distribution as a CLI tool via npm/npx
+- **Hook Input Processing**: Standardizes handling of Claude Code hook events with automatic snake_case to camelCase conversion
+- **Presenter Pattern**: Provides structured JSON output format for Claude Code integration
 - **Builder Pattern**: `JsonWorkingStateBuilder` for flexible state construction with config support
 - **Repository Pattern**: `JsonRubricRepository` for abstracted data access
+- **Step Pattern for Tests**: Provides readable test structure with given-when-then style helpers
