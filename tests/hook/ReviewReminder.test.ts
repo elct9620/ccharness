@@ -1,17 +1,36 @@
-import { describe, expect, it } from "vitest";
+import { describe, it } from "vitest";
 
-import { IConsole } from "@/container";
 import { reviewReminderAction } from "@/handlers/hook/ReviewReminder";
-import type { TestConsole } from "tests/support/TestConsole";
-import { container } from "tsyringe";
+import {
+  givenHookInput,
+  thenHookOutputShouldBe,
+  thenHookOutputShouldBeEmpty,
+} from "tests/steps/hook";
 
 describe("Review Reminder Action", () => {
-  describe("when the tool is not allowed", () => {
+  describe("when the tool is not supported", () => {
     it("is expected to allow without output", async () => {
-      const testConsole = container.resolve<TestConsole>(IConsole);
-
+      await givenHookInput("{}");
       await reviewReminderAction();
-      expect(testConsole.outputString).toBe("");
+      await thenHookOutputShouldBeEmpty();
+    });
+  });
+
+  describe("when the tool is supported", () => {
+    it("is expected to remind to review", async () => {
+      await givenHookInput(
+        JSON.stringify({
+          toolName: "Write",
+          toolResponse: {
+            filePath: "src/index.ts",
+          },
+        }),
+      );
+      await reviewReminderAction();
+      await thenHookOutputShouldBe({
+        reason: "",
+        hookSpecificOutput: {},
+      });
     });
   });
 });

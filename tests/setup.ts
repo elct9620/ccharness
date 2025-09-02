@@ -2,12 +2,12 @@ import "@abraham/reflection";
 
 import { Readable, Writable } from "stream";
 import { container } from "tsyringe";
-import { beforeAll } from "vitest";
+import { beforeEach } from "vitest";
 
 import { IConsole, IHookInputStream } from "@/container";
 import { TestConsole } from "./support/TestConsole";
 
-beforeAll(() => {
+beforeEach(() => {
   container.clearInstances();
 
   container.register(IHookInputStream, {
