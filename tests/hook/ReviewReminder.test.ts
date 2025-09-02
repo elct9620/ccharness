@@ -7,7 +7,7 @@ import {
   thenHookOutputShouldBeEmpty,
 } from "tests/steps/hook";
 
-describe("Review Reminder Action", () => {
+describe("Review Reminder", () => {
   describe("when the tool is not supported", () => {
     it("is expected to allow without output", async () => {
       await givenHookInput("{}");
@@ -16,8 +16,8 @@ describe("Review Reminder Action", () => {
     });
   });
 
-  describe("when the tool is supported", () => {
-    it("is expected to remind to review", async () => {
+  describe("when the tool is supported without rubrics", () => {
+    it("is expected to allow without reason", async () => {
       await givenHookInput(
         JSON.stringify({
           toolName: "Write",
