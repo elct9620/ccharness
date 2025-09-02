@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
-import { IConsole } from "@/container";
+import { IConsole } from "@/token";
 import type { StopDecisionPresenter } from "@/usecases/interface";
 import { ConsoleDecisionPresenter } from "./ConsoleDecisionPresenter";
 

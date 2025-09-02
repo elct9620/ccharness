@@ -4,7 +4,8 @@ import { Readable, Writable } from "stream";
 import { container } from "tsyringe";
 import { beforeEach } from "vitest";
 
-import { IConsole, IHookInputStream } from "@/container";
+import "@/container";
+import { IConsole, IHookInputStream } from "@/token";
 import { TestConsole } from "./support/TestConsole";
 
 beforeEach(() => {

@@ -1,4 +1,4 @@
-import { IHookInputStream } from "@/container";
+import { IHookInputStream } from "@/token";
 import type { HookInput } from "@/usecases/port";
 import { inject, injectable } from "tsyringe";
 

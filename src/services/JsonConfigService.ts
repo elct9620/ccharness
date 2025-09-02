@@ -2,7 +2,7 @@ import { readFile } from "fs/promises";
 import { inject, injectable } from "tsyringe";
 
 import { CONFIG_FILE_NAME, type ConfigSchema } from "@/constant";
-import { IProjectRoot } from "@/container";
+import { IProjectRoot } from "@/token";
 
 const defaultConfig: ConfigSchema = {
   commit: {
