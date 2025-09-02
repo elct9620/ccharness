@@ -1,14 +1,13 @@
 import { inject, injectable } from "tsyringe";
 
 import { Rubric } from "@/entities/Rubric";
-import { JsonConfigService } from "@/services/JsonConfigService";
+import { IConfigService } from "@/token";
 import type { RubricRepository } from "@/usecases/interface";
+import type { ConfigService } from "./interface";
 
 @injectable()
 export class JsonRubricRepository implements RubricRepository {
-  constructor(
-    @inject(JsonConfigService) private configService: JsonConfigService,
-  ) {}
+  constructor(@inject(IConfigService) private configService: ConfigService) {}
 
   async matches(path: string): Promise<Rubric[]> {
     const config = await this.configService.load();

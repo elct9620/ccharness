@@ -2,8 +2,9 @@ import { inject, injectable } from "tsyringe";
 
 import { type ConfigSchema } from "@/constant";
 import { WorkingState } from "@/entities/WorkingState";
+import { IConfigService } from "@/token";
 import type { WorkingStateBuilder } from "@/usecases/interface";
-import { JsonConfigService } from "./JsonConfigService";
+import type { ConfigService } from "./interface";
 
 @injectable()
 export class JsonWorkingStateBuilder implements WorkingStateBuilder {
@@ -16,9 +17,7 @@ export class JsonWorkingStateBuilder implements WorkingStateBuilder {
 
   private isLoadedFromConfig = false;
 
-  constructor(
-    @inject(JsonConfigService) private configService: JsonConfigService,
-  ) {}
+  constructor(@inject(IConfigService) private configService: ConfigService) {}
 
   useConfigFile(): WorkingStateBuilder {
     this.isLoadedFromConfig = true;
