@@ -5,9 +5,9 @@ import { expect } from "vitest";
 
 import { IConsole, IHookInputStream } from "@/token";
 
-export async function givenHookInput(input: string) {
+export async function givenHookInput(input: object) {
   container.register(IHookInputStream, {
-    useValue: Readable.from([input]),
+    useValue: Readable.from([JSON.stringify(input)]),
   });
 }
 
