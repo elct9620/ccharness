@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/elct9620/ccharness/compare/v0.2.0...v0.3.0) (2025-09-03)
+
+
+### Features
+
+* add block option to review-reminder hook ([d9c5387](https://github.com/elct9620/ccharness/commit/d9c53877acf90552ce0302a4d4783ef5d10593a7))
+* improve review reminder message and fix block option priority ([2fcf91f](https://github.com/elct9620/ccharness/commit/2fcf91f605e7d66dd6401c4086c78d1162b90c0a))
+
+
+### Bug Fixes
+
+* add missing decision field to PostToolUse presenter block output ([07b2074](https://github.com/elct9620/ccharness/commit/07b207451fbfbc8bfc6a9f36ca1ba9d0d46ea2c9))
+
 ## [0.2.0](https://github.com/elct9620/ccharness/compare/v0.1.4...v0.2.0) (2025-08-31)
 
 
