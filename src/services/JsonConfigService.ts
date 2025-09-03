@@ -9,6 +9,9 @@ const defaultConfig: ConfigSchema = {
     maxFiles: -1,
     maxLines: -1,
   },
+  review: {
+    blockEdit: false,
+  },
   rubrics: [],
 };
 

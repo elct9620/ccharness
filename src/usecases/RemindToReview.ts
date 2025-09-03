@@ -5,6 +5,7 @@ import type {
 
 export type RemindToReviewInput = {
   filePath: string;
+  blockEdit?: boolean;
 };
 
 export class RemindToReview {
@@ -23,8 +24,13 @@ export class RemindToReview {
     const rubricPathReferences = matchedRubrics
       .map((r) => `@${r.path}`)
       .join(", ");
-    this.presenter.allow(
-      `Ensure self-review changes against ${rubricPathReferences}, keep it simple before next change is made.`,
-    );
+
+    const reviewMessage = `Ensure self-review changes against ${rubricPathReferences}, keep it simple before next change is made.`;
+
+    if (input.blockEdit) {
+      this.presenter.block(reviewMessage);
+    } else {
+      this.presenter.allow(reviewMessage);
+    }
   }
 }

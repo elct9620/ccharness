@@ -371,4 +371,226 @@ describe("Review Reminder", () => {
       await thenHookOutputShouldBeEmpty();
     });
   });
+
+  describe("when block option is enabled via CLI", () => {
+    it("is expected to block with rubric review message", async () => {
+      await givenConfig({
+        commit: {
+          maxFiles: 5,
+          maxLines: 500,
+        },
+        rubrics: [
+          {
+            name: "typescript",
+            pattern: "\\.ts$",
+            path: "docs/rubrics/typescript.md",
+          },
+        ],
+      });
+
+      await givenHookInput({
+        toolName: "Write",
+        toolResponse: {
+          filePath: "src/index.ts",
+        },
+      });
+
+      await reviewReminderAction({ block: true });
+
+      await thenHookOutputShouldBe({
+        decision: "block",
+        reason:
+          "Ensure self-review changes against @docs/rubrics/typescript.md, keep it simple before next change is made.",
+        hookSpecificOutput: {
+          hookEventName: "PostToolUse",
+        },
+      });
+    });
+
+    it("is expected to block with multiple rubrics message", async () => {
+      await givenConfig({
+        commit: {
+          maxFiles: 5,
+          maxLines: 500,
+        },
+        rubrics: [
+          {
+            name: "typescript",
+            pattern: "^src/.*\\.ts$",
+            path: "docs/rubrics/typescript.md",
+          },
+          {
+            name: "testing",
+            pattern: "\\.test\\.ts$",
+            path: "docs/rubrics/testing.md",
+          },
+        ],
+      });
+
+      await givenHookInput({
+        toolName: "Edit",
+        toolResponse: {
+          filePath: "tests/example.test.ts",
+        },
+      });
+
+      await reviewReminderAction({ block: true });
+
+      await thenHookOutputShouldBe({
+        decision: "block",
+        reason:
+          "Ensure self-review changes against @docs/rubrics/testing.md, keep it simple before next change is made.",
+        hookSpecificOutput: {
+          hookEventName: "PostToolUse",
+        },
+      });
+    });
+
+    it("is expected to allow when no rubrics match even with block enabled", async () => {
+      await givenConfig({
+        commit: {
+          maxFiles: 5,
+          maxLines: 500,
+        },
+        rubrics: [
+          {
+            name: "python",
+            pattern: "\\.py$",
+            path: "docs/rubrics/python.md",
+          },
+        ],
+      });
+
+      await givenHookInput({
+        toolName: "Write",
+        toolResponse: {
+          filePath: "src/index.ts",
+        },
+      });
+
+      await reviewReminderAction({ block: true });
+
+      await thenHookOutputShouldBe({
+        reason: "",
+        hookSpecificOutput: {
+          hookEventName: "PostToolUse",
+        },
+      });
+    });
+  });
+
+  describe("when block option is enabled via config", () => {
+    it("is expected to block with rubric review message", async () => {
+      await givenConfig({
+        commit: {
+          maxFiles: 5,
+          maxLines: 500,
+        },
+        review: {
+          blockEdit: true,
+        },
+        rubrics: [
+          {
+            name: "typescript",
+            pattern: "\\.ts$",
+            path: "docs/rubrics/typescript.md",
+          },
+        ],
+      });
+
+      await givenHookInput({
+        toolName: "MultiEdit",
+        toolResponse: {
+          filePath: "src/handlers/hook/ReviewReminder.ts",
+        },
+      });
+
+      await reviewReminderAction();
+
+      await thenHookOutputShouldBe({
+        decision: "block",
+        reason:
+          "Ensure self-review changes against @docs/rubrics/typescript.md, keep it simple before next change is made.",
+        hookSpecificOutput: {
+          hookEventName: "PostToolUse",
+        },
+      });
+    });
+  });
+
+  describe("when block option precedence", () => {
+    it("is expected CLI option to override config (CLI true, config false)", async () => {
+      await givenConfig({
+        commit: {
+          maxFiles: 5,
+          maxLines: 500,
+        },
+        review: {
+          blockEdit: false,
+        },
+        rubrics: [
+          {
+            name: "typescript",
+            pattern: "\\.ts$",
+            path: "docs/rubrics/typescript.md",
+          },
+        ],
+      });
+
+      await givenHookInput({
+        toolName: "Write",
+        toolResponse: {
+          filePath: "src/index.ts",
+        },
+      });
+
+      await reviewReminderAction({ block: true });
+
+      await thenHookOutputShouldBe({
+        decision: "block",
+        reason:
+          "Ensure self-review changes against @docs/rubrics/typescript.md, keep it simple before next change is made.",
+        hookSpecificOutput: {
+          hookEventName: "PostToolUse",
+        },
+      });
+    });
+
+    it("is expected CLI option to override config (CLI false, config true)", async () => {
+      await givenConfig({
+        commit: {
+          maxFiles: 5,
+          maxLines: 500,
+        },
+        review: {
+          blockEdit: true,
+        },
+        rubrics: [
+          {
+            name: "typescript",
+            pattern: "\\.ts$",
+            path: "docs/rubrics/typescript.md",
+          },
+        ],
+      });
+
+      await givenHookInput({
+        toolName: "Write",
+        toolResponse: {
+          filePath: "src/index.ts",
+        },
+      });
+
+      await reviewReminderAction({ block: false });
+
+      await thenHookOutputShouldBe({
+        reason: "",
+        hookSpecificOutput: {
+          hookEventName: "PostToolUse",
+          additionalContext:
+            "Ensure self-review changes against @docs/rubrics/typescript.md, keep it simple before next change is made.",
+        },
+      });
+    });
+  });
 });

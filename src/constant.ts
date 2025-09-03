@@ -5,6 +5,9 @@ export type ConfigSchema = {
     maxFiles: number;
     maxLines: number;
   };
+  review: {
+    blockEdit: boolean;
+  };
   rubrics: {
     name: string;
     pattern: string;
