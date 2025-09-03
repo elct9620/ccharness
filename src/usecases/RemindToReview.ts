@@ -24,7 +24,7 @@ export class RemindToReview {
       .map((r) => `@${r.path}`)
       .join(", ");
     this.presenter.allow(
-      `Review changes against ${rubricPathReferences}, keep it simple, then continue iterating.`,
+      `Ensure self-review changes against ${rubricPathReferences}, keep it simple before next change is made.`,
     );
   }
 }
