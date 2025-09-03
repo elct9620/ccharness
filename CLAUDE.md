@@ -24,14 +24,18 @@ pnpm install
 
 # Build the project (creates dist/index.js)
 pnpm build
-# or: rolldown -c rolldown.config.ts
 
-# Run tests
+# Run all tests
 pnpm test
-# or: vitest --run
 
 # Run tests in watch mode
 vitest
+
+# Run a specific test file
+vitest tests/path/to/test.test.ts
+
+# Run tests with coverage
+vitest --coverage
 
 # Format code
 npx prettier --write .
@@ -39,16 +43,13 @@ npx prettier --write .
 # Check formatting
 npx prettier --check .
 
-# Run a specific test file
-vitest path/to/test.spec.ts
-
-# Run tests with coverage
-vitest --coverage
-
 # Test the CLI locally after build
 node dist/index.js hook guard-commit --help
 # or using npx with the current directory
 npx . hook guard-commit
+
+# Test hooks with mock input (for development)
+echo '{"session_id":"test","cwd":"/path"}' | node dist/index.js hook guard-commit
 ```
 
 ## Architecture
@@ -211,9 +212,11 @@ Rolldown bundles the entire application into a single ESM file:
 
 4. **Testing**:
    - Test files use `.test.ts` extension in the `tests/` directory mirroring source structure
-   - Use Vitest for unit and integration tests
-   - Test helpers follow step pattern (e.g., `givenHookInput`, `thenHookOutputShouldBe`)
+   - Use Vitest for unit and integration tests with setup file at `tests/setup.ts`
+   - Test helpers follow BDD step pattern (e.g., `givenHookInput`, `thenHookOutputShouldBe`) located in `tests/steps/`
    - Mock external dependencies using DI container registration
+   - Test naming follows `describe('Feature') > describe('when condition') > it('is expected to behavior')` pattern
+   - Code must pass quality rubric (80%+ score) defined in `docs/rubrics/testing.md`
 
 ## Configuration
 
