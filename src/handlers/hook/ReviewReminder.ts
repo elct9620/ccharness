@@ -28,10 +28,16 @@ export async function reviewReminderAction(
   }
 
   const config = await configService.load();
-  const blockEdit =
-    options.block !== undefined
-      ? options.block
-      : config.review?.blockEdit || false;
+
+  // Priority: CLI option provided > config > default false
+  let blockEdit = false;
+  if (options.block !== undefined) {
+    // -b/--block explicitly provided (true or false)
+    blockEdit = options.block;
+  } else {
+    // No CLI option provided, use config
+    blockEdit = config.review?.blockEdit || false;
+  }
 
   const remindeToReview = new RemindToReview(rubricRepository, presenter);
   await remindeToReview.execute({

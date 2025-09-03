@@ -64,7 +64,7 @@ describe("Review Reminder", () => {
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
           additionalContext:
-            "Ensure self-review changes against @docs/rubrics/vitest.md, keep it simple before next change is made.",
+            "Ensure review changes against @docs/rubrics/vitest.md, fix rubrics violations and keep the code clean before proceeding.",
         },
       });
     });
@@ -99,7 +99,7 @@ describe("Review Reminder", () => {
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
           additionalContext:
-            "Ensure self-review changes against @docs/rubrics/vitest.md, keep it simple before next change is made.",
+            "Ensure review changes against @docs/rubrics/vitest.md, fix rubrics violations and keep the code clean before proceeding.",
         },
       });
     });
@@ -134,7 +134,7 @@ describe("Review Reminder", () => {
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
           additionalContext:
-            "Ensure self-review changes against @docs/rubrics/typescript.md, keep it simple before next change is made.",
+            "Ensure review changes against @docs/rubrics/typescript.md, fix rubrics violations and keep the code clean before proceeding.",
         },
       });
     });
@@ -179,7 +179,7 @@ describe("Review Reminder", () => {
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
           additionalContext:
-            "Ensure self-review changes against @docs/rubrics/typescript.md, @docs/rubrics/testing.md, @docs/rubrics/hooks.md, keep it simple before next change is made.",
+            "Ensure review changes against @docs/rubrics/typescript.md, @docs/rubrics/testing.md, @docs/rubrics/hooks.md, fix rubrics violations and keep the code clean before proceeding.",
         },
       });
     });
@@ -279,7 +279,7 @@ describe("Review Reminder", () => {
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
           additionalContext:
-            "Ensure self-review changes against @docs/rubrics/nested.md, keep it simple before next change is made.",
+            "Ensure review changes against @docs/rubrics/nested.md, fix rubrics violations and keep the code clean before proceeding.",
         },
       });
     });
@@ -312,7 +312,7 @@ describe("Review Reminder", () => {
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
           additionalContext:
-            "Ensure self-review changes against @docs/rubrics/absolute.md, keep it simple before next change is made.",
+            "Ensure review changes against @docs/rubrics/absolute.md, fix rubrics violations and keep the code clean before proceeding.",
         },
       });
     });
@@ -400,7 +400,7 @@ describe("Review Reminder", () => {
       await thenHookOutputShouldBe({
         decision: "block",
         reason:
-          "Ensure self-review changes against @docs/rubrics/typescript.md, keep it simple before next change is made.",
+          "Ensure review changes against @docs/rubrics/typescript.md, fix rubrics violations and keep the code clean before proceeding.",
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
         },
@@ -439,7 +439,7 @@ describe("Review Reminder", () => {
       await thenHookOutputShouldBe({
         decision: "block",
         reason:
-          "Ensure self-review changes against @docs/rubrics/testing.md, keep it simple before next change is made.",
+          "Ensure review changes against @docs/rubrics/testing.md, fix rubrics violations and keep the code clean before proceeding.",
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
         },
@@ -510,7 +510,7 @@ describe("Review Reminder", () => {
       await thenHookOutputShouldBe({
         decision: "block",
         reason:
-          "Ensure self-review changes against @docs/rubrics/typescript.md, keep it simple before next change is made.",
+          "Ensure review changes against @docs/rubrics/typescript.md, fix rubrics violations and keep the code clean before proceeding.",
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
         },
@@ -549,7 +549,7 @@ describe("Review Reminder", () => {
       await thenHookOutputShouldBe({
         decision: "block",
         reason:
-          "Ensure self-review changes against @docs/rubrics/typescript.md, keep it simple before next change is made.",
+          "Ensure review changes against @docs/rubrics/typescript.md, fix rubrics violations and keep the code clean before proceeding.",
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
         },
@@ -588,7 +588,44 @@ describe("Review Reminder", () => {
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
           additionalContext:
-            "Ensure self-review changes against @docs/rubrics/typescript.md, keep it simple before next change is made.",
+            "Ensure review changes against @docs/rubrics/typescript.md, fix rubrics violations and keep the code clean before proceeding.",
+        },
+      });
+    });
+
+    it("is expected to use config when no CLI option provided", async () => {
+      await givenConfig({
+        commit: {
+          maxFiles: 5,
+          maxLines: 500,
+        },
+        review: {
+          blockEdit: true,
+        },
+        rubrics: [
+          {
+            name: "typescript",
+            pattern: "\\.ts$",
+            path: "docs/rubrics/typescript.md",
+          },
+        ],
+      });
+
+      await givenHookInput({
+        toolName: "Write",
+        toolResponse: {
+          filePath: "src/index.ts",
+        },
+      });
+
+      await reviewReminderAction({});
+
+      await thenHookOutputShouldBe({
+        decision: "block",
+        reason:
+          "Ensure review changes against @docs/rubrics/typescript.md, fix rubrics violations and keep the code clean before proceeding.",
+        hookSpecificOutput: {
+          hookEventName: "PostToolUse",
         },
       });
     });

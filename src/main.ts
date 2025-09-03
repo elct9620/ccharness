@@ -36,8 +36,7 @@ hook
   .command("review-reminder")
   .option(
     "-b, --block",
-    "Block execution instead of providing additional context, use -1 to disable",
-    false,
+    "Block execution instead of providing additional context",
   )
   .description("Add additional context to reminders to review code after edits")
   .action(reviewReminderAction);

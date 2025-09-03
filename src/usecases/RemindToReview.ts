@@ -25,7 +25,7 @@ export class RemindToReview {
       .map((r) => `@${r.path}`)
       .join(", ");
 
-    const reviewMessage = `Ensure self-review changes against ${rubricPathReferences}, keep it simple before next change is made.`;
+    const reviewMessage = `Ensure review changes against ${rubricPathReferences}, fix rubrics violations and keep the code clean before proceeding.`;
 
     if (input.blockEdit) {
       this.presenter.block(reviewMessage);
