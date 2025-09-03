@@ -64,7 +64,7 @@ describe("Review Reminder", () => {
         hookSpecificOutput: {
           hookEventName: "PostToolUse",
           additionalContext:
-            "Ensure self-review based on the following rubric(s): @docs/rubrics/vitest.md.",
+            "Review changes against @docs/rubrics/vitest.md, keep it simple, then continue iterating.",
         },
       });
     });
