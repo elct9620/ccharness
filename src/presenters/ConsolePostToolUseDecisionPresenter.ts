@@ -25,6 +25,7 @@ export class ConsolePostToolUseDecisionPresenter
 
   async block(reason: string, context?: string): Promise<void> {
     this.render({
+      decision: "block",
       reason,
       hookSpecificOutput: {
         hookEventName: "PostToolUse",
