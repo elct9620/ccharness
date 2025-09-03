@@ -17,6 +17,7 @@ export class ConsolePostToolUseDecisionPresenter
     this.render({
       reason: "",
       hookSpecificOutput: {
+        hookEventName: "PostToolUse",
         additionalContext: context,
       },
     });
@@ -26,6 +27,7 @@ export class ConsolePostToolUseDecisionPresenter
     this.render({
       reason,
       hookSpecificOutput: {
+        hookEventName: "PostToolUse",
         additionalContext: context,
       },
     });

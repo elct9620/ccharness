@@ -28,7 +28,9 @@ describe("Review Reminder", () => {
       await reviewReminderAction();
       await thenHookOutputShouldBe({
         reason: "",
-        hookSpecificOutput: {},
+        hookSpecificOutput: {
+          hookEventName: "PostToolUse",
+        },
       });
     });
   });
@@ -60,6 +62,7 @@ describe("Review Reminder", () => {
       await thenHookOutputShouldBe({
         reason: "",
         hookSpecificOutput: {
+          hookEventName: "PostToolUse",
           additionalContext:
             "Ensure self-review based on the following rubric(s): @docs/rubrics/vitest.md.",
         },
