@@ -4,3 +4,4 @@ coverage
 dist
 pnpm-lock.yaml
 CLAUDE.md
+.release-please-manifest.json
