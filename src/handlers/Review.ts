@@ -1,7 +1,8 @@
-type ReviewOptions = {
-  path: string;
-};
+import { container } from "tsyringe";
 
-export async function reviewAction(path: string, options: ReviewOptions) {
-  console.log("Score: 1/1");
+import { ConsoleReviewPresenter } from "@/presenters/ConsoleReviewPresenter";
+
+export async function reviewAction(path: string) {
+  const presenter = container.resolve(ConsoleReviewPresenter);
+  presenter.pass();
 }
