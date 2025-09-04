@@ -58,6 +58,10 @@ A `PostToolUse` hook for `Write`, `Edit`, `MultiEdit` tool to remind Claude Code
 npx -y @aotoki/ccharness hook review-reminder
 ```
 
+Options:
+
+- `-b`, `--block`: Block execution instead of providing additional context. When enabled, the hook will block Claude Code from proceeding until the review is addressed. Default is `false`.
+
 > Currently, we only add context to remind agent we have rubric document, and use it to review the changes.
 
 ## Configuration
@@ -69,6 +73,9 @@ The most config can use `ccharness.json` in project root to customize the behavi
   "commit": {
     "maxFiles": 10,
     "maxLines": 500
+  },
+  "review": {
+    "blockEdit": false
   },
   "rubrics": [
     {
