@@ -4,6 +4,7 @@ import "@abraham/reflection";
 import { Command } from "commander";
 
 import { guardCommitAction } from "@/handlers/hook/GuardCommit";
+import { reviewAction } from "@/handlers/Review";
 import "./container";
 import { reviewReminderAction } from "./handlers/hook/ReviewReminder";
 
@@ -40,5 +41,11 @@ hook
   )
   .description("Add additional context to reminders to review code after edits")
   .action(reviewReminderAction);
+
+program
+  .command("review")
+  .argument("<path>", "Path to the file to review")
+  .description("Review a file against configured rubrics")
+  .action(reviewAction);
 
 await program.parseAsync(process.argv);
