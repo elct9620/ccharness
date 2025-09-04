@@ -11,9 +11,9 @@ Following are the criteria used to evaluate the quality of tests, review step by
 The `vitest` outputs `feature > context > scenario` format, that means our test case should naming like this:
 
 ```ts
-describe('Review Reminder', () => {
-  describe('when rubric config is provided', () => {
-    it('is expected to allow with additional context', () => {
+describe("Review Reminder", () => {
+  describe("when rubric config is provided", () => {
+    it("is expected to allow with additional context", () => {
       // test implementation
     });
   });
@@ -30,11 +30,11 @@ To make each test case more readable, we split the details into `tests/stpes` fo
 ```ts
 import { reviewReminderAction } from "@/handlers/hook/ReviewReminder"; // The action to be tested, the naming is allowed to be different
 
-it('is expected to allow with additional context', async () => {
+it("is expected to allow with additional context", async () => {
   await givenHookInput({});
   await reviewReminderAction();
   await thenHookOutputShouldBeEmpty();
-  });
+});
 ```
 
 - The `given` step is used to set up the initial state or context for the test.
