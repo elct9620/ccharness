@@ -10,7 +10,7 @@ const defaultConfig: ConfigSchema = {
     maxLines: -1,
   },
   review: {
-    blockEdit: false,
+    blockMode: false,
   },
   rubrics: [],
 };

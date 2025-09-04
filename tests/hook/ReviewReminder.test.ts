@@ -487,7 +487,7 @@ describe("Review Reminder", () => {
           maxLines: 500,
         },
         review: {
-          blockEdit: true,
+          blockMode: true,
         },
         rubrics: [
           {
@@ -526,7 +526,7 @@ describe("Review Reminder", () => {
           maxLines: 500,
         },
         review: {
-          blockEdit: false,
+          blockMode: false,
         },
         rubrics: [
           {
@@ -563,7 +563,7 @@ describe("Review Reminder", () => {
           maxLines: 500,
         },
         review: {
-          blockEdit: true,
+          blockMode: true,
         },
         rubrics: [
           {
@@ -600,7 +600,7 @@ describe("Review Reminder", () => {
           maxLines: 500,
         },
         review: {
-          blockEdit: true,
+          blockMode: true,
         },
         rubrics: [
           {

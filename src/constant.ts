@@ -6,7 +6,7 @@ export type ConfigSchema = {
     maxLines: number;
   };
   review: {
-    blockEdit: boolean;
+    blockMode: boolean;
   };
   rubrics: {
     name: string;

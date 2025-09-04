@@ -5,7 +5,7 @@ import type {
 
 export type RemindToReviewInput = {
   filePath: string;
-  blockEdit?: boolean;
+  blockMode?: boolean;
 };
 
 export class RemindToReview {
@@ -27,7 +27,7 @@ export class RemindToReview {
 
     const reviewMessage = `Ensure review changes against ${rubricPathReferences}, fix rubrics violations and keep the code clean before proceeding.`;
 
-    if (input.blockEdit) {
+    if (input.blockMode) {
       this.presenter.block(reviewMessage);
     } else {
       this.presenter.allow(reviewMessage);

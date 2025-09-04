@@ -75,7 +75,7 @@ The most config can use `ccharness.json` in project root to customize the behavi
     "maxLines": 500
   },
   "review": {
-    "blockEdit": false
+    "blockMode": false
   },
   "rubrics": [
     {
