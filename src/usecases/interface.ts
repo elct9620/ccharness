@@ -38,3 +38,8 @@ export const IRubricRepository = Symbol("IRubricRepository");
 export interface RubricRepository {
   matches(path: string): Promise<Rubric[]>;
 }
+
+export const IReviewPresenter = Symbol("IReviewPresenter");
+export interface ReviewPresenter {
+  pass(): Promise<void>;
+}
