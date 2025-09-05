@@ -23,7 +23,7 @@ export interface WorkingStateBuilder {
 
 export const IStopDicisionPresenter = Symbol("IStopDicisionPresenter");
 export interface StopDecisionPresenter {
-  allow(reason?: string): Promise<void>;
+  pass(reason?: string): Promise<void>;
   block(reason: string): Promise<void>;
 }
 
@@ -31,7 +31,7 @@ export const IPostToolUseDecisionPresenter = Symbol(
   "IPostToolUseDecisionPresenter",
 );
 export interface PostToolUseDecisionPresenter {
-  allow(context?: string): Promise<void>;
+  pass(context?: string): Promise<void>;
   block(reason: string, context?: string): Promise<void>;
 }
 

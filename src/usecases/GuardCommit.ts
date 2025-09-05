@@ -22,13 +22,13 @@ export class GuardCommit {
 
   async execute(input: GuardCommitInput): Promise<void> {
     if (input.hook.stopHookActive) {
-      await this.decisionPresenter.allow();
+      await this.decisionPresenter.pass();
       return;
     }
 
     const isGitAvailable = await this.gitService.isAvailable();
     if (!isGitAvailable) {
-      await this.decisionPresenter.allow();
+      await this.decisionPresenter.pass();
       return;
     }
 
@@ -46,7 +46,7 @@ export class GuardCommit {
       .build();
 
     if (!state.isExceeded) {
-      await this.decisionPresenter.allow();
+      await this.decisionPresenter.pass();
       return;
     }
 

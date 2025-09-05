@@ -13,7 +13,7 @@ export class ConsolePostToolUseDecisionPresenter
     super(console);
   }
 
-  async allow(context?: string): Promise<void> {
+  async pass(context?: string): Promise<void> {
     this.render({
       reason: "",
       hookSpecificOutput: {

@@ -10,7 +10,7 @@ import {
 
 describe("Review Reminder", () => {
   describe("when the tool is not supported", () => {
-    it("is expected to allow without output", async () => {
+    it("is expected to pass without output", async () => {
       await givenHookInput({});
       await reviewReminderAction();
       await thenHookOutputShouldBeEmpty();
@@ -18,7 +18,7 @@ describe("Review Reminder", () => {
   });
 
   describe("when the tool is supported without rubrics", () => {
-    it("is expected to allow without reason", async () => {
+    it("is expected to pass without reason", async () => {
       await givenHookInput({
         toolName: "Write",
         toolResponse: {
@@ -186,7 +186,7 @@ describe("Review Reminder", () => {
   });
 
   describe("when rubrics exist but none match the file", () => {
-    it("is expected to allow without additional context", async () => {
+    it("is expected to pass without additional context", async () => {
       await givenConfig({
         commit: {
           maxFiles: 5,
@@ -224,7 +224,7 @@ describe("Review Reminder", () => {
   });
 
   describe("when config has empty rubrics array", () => {
-    it("is expected to allow without additional context", async () => {
+    it("is expected to pass without additional context", async () => {
       await givenConfig({
         commit: {
           maxFiles: 5,
@@ -446,7 +446,7 @@ describe("Review Reminder", () => {
       });
     });
 
-    it("is expected to allow when no rubrics match even with block enabled", async () => {
+    it("is expected to pass when no rubrics match even with block enabled", async () => {
       await givenConfig({
         commit: {
           maxFiles: 5,

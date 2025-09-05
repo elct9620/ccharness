@@ -17,7 +17,7 @@ export class RemindToReview {
   async execute(input: RemindToReviewInput): Promise<void> {
     const matchedRubrics = await this.rubrics.matches(input.filePath);
     if (matchedRubrics.length === 0) {
-      this.presenter.allow();
+      this.presenter.pass();
       return;
     }
 
@@ -30,7 +30,7 @@ export class RemindToReview {
     if (input.blockMode) {
       this.presenter.block(reviewMessage);
     } else {
-      this.presenter.allow(reviewMessage);
+      this.presenter.pass(reviewMessage);
     }
   }
 }

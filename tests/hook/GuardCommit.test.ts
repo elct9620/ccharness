@@ -8,7 +8,7 @@ import { givenHookInput, thenHookOutputShouldBe } from "tests/steps/hook";
 
 describe("Guard Commit", () => {
   describe("when stop hook is already active", () => {
-    it("is expected to allow without blocking", async () => {
+    it("is expected to pass without blocking", async () => {
       await givenHookInput({
         sessionId: "test-session",
         transcriptPath: "/tmp/transcript.json",
@@ -29,7 +29,7 @@ describe("Guard Commit", () => {
   });
 
   describe("when git is not available", () => {
-    it("is expected to allow without blocking", async () => {
+    it("is expected to pass without blocking", async () => {
       const gitService: Partial<GitService> = {
         isAvailable: vi.fn().mockResolvedValue(false),
       };
@@ -55,7 +55,7 @@ describe("Guard Commit", () => {
   });
 
   describe("when changes are within limits", () => {
-    it("is expected to allow without blocking", async () => {
+    it("is expected to pass without blocking", async () => {
       const gitService: Partial<GitService> = {
         isAvailable: vi.fn().mockResolvedValue(true),
         countChangedFiles: vi.fn().mockResolvedValue(5),
@@ -251,7 +251,7 @@ describe("Guard Commit", () => {
   });
 
   describe("when limits are disabled", () => {
-    it("is expected to allow when both limits are -1 without config", async () => {
+    it("is expected to pass when both limits are -1 without config", async () => {
       await givenConfig({
         commit: {
           maxFiles: -1,

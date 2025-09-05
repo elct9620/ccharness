@@ -13,7 +13,7 @@ export class ConsoleStopDecisionPresenter
     super(console);
   }
 
-  async allow(reason?: string): Promise<void> {
+  async pass(reason?: string): Promise<void> {
     this.render({
       decision: undefined,
       reason: reason || "",
