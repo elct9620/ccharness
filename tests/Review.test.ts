@@ -8,7 +8,7 @@ describe("Review", () => {
     it("is expected to output score", async () => {
       await reviewAction("src/main.ts");
 
-      await thenReviewOutputShouldBe("Score: 1/1");
+      await thenReviewOutputShouldBe("Test Quality: 2/5 (40%)");
     });
   });
 });

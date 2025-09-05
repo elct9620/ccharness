@@ -1,3 +1,4 @@
+import type { ReviewReport } from "@/entities/ReviewReport";
 import type { Rubric } from "@/entities/Rubric";
 import type { WorkingState } from "@/entities/WorkingState";
 
@@ -41,5 +42,5 @@ export interface RubricRepository {
 
 export const IReviewPresenter = Symbol("IReviewPresenter");
 export interface ReviewPresenter {
-  pass(): Promise<void>;
+  display(report: ReviewReport): Promise<void>;
 }
