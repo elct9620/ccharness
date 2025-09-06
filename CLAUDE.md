@@ -15,6 +15,7 @@ CCharness is a lightweight harness for Claude Code, built with TypeScript and de
 - **CLI Framework**: Commander.js (v14)
 - **Dependency Injection**: tsyringe with @abraham/reflection
 - **Code Formatting**: Prettier (v3.6.2) with organize-imports plugin
+- **Claude Code Integration**: @anthropic-ai/claude-code for API access
 
 ## Common Commands
 
@@ -50,6 +51,9 @@ npx . hook guard-commit
 
 # Test hooks with mock input (for development)
 echo '{"session_id":"test","cwd":"/path"}' | node dist/index.js hook guard-commit
+
+# Review a file against configured rubrics
+node dist/index.js review src/main.ts --max-retry 5
 ```
 
 ## Architecture
@@ -64,28 +68,35 @@ src/
 ├── token.ts                   # DI token symbols (IProjectRoot, IHookInputStream, IConsole, IConfigService)
 ├── constant.ts                # Shared constants and types (ConfigSchema, CommandOptions)
 ├── handlers/                  # Command handlers (entry points)
-│   └── hook/                 # Hook-related command handlers
-│       ├── GuardCommit.ts    # Stop hook for commit reminders
-│       └── ReviewReminder.ts # PostToolUse hook for review reminders
+│   ├── hook/                 # Hook-related command handlers
+│   │   ├── GuardCommit.ts    # Stop hook for commit reminders
+│   │   └── ReviewReminder.ts # PostToolUse hook for review reminders
+│   └── Review.ts             # Standalone review command handler
 ├── usecases/                  # Core business logic (framework-agnostic)
 │   ├── interface.ts          # Domain interfaces with DI symbols
 │   ├── port.ts               # Data transfer types for external inputs
 │   ├── GuardCommit.ts        # Commit guard logic
-│   └── RemindToReview.ts     # Review reminder logic
+│   ├── RemindToReview.ts     # Review reminder logic
+│   └── ReviewCode.ts         # Code review evaluation logic
 ├── entities/                  # Domain entities
 │   ├── WorkingState.ts       # Git working directory state model
-│   └── Rubric.ts             # Code review rubric model
+│   ├── Rubric.ts             # Code review rubric model
+│   ├── ReviewReport.ts       # Review evaluation report
+│   ├── Evaluation.ts         # Individual rubric evaluation
+│   └── Criteria.ts           # Review criteria definition
 ├── services/                  # External system integrations
 │   ├── CmdGitService.ts      # Git operations via CLI
 │   ├── ReadHookInputService.ts # Parse Claude Code hook JSON input
 │   ├── JsonConfigService.ts  # Configuration file loader
-│   └── JsonWorkingStateBuilder.ts # Config-aware state builder
+│   ├── JsonWorkingStateBuilder.ts # Config-aware state builder
+│   └── ClaudeReviewService.ts # Claude Code API integration for reviews
 ├── repositories/              # Data access layer
 │   └── JsonRubricRepository.ts # Rubric configuration repository
 └── presenters/                # Output formatting for Claude Code
     ├── ConsoleDecisionPresenter.ts           # Base presenter
     ├── ConsoleStopDecisionPresenter.ts       # Stop hook decision output
-    └── ConsolePostToolUseDecisionPresenter.ts # PostToolUse hook output
+    ├── ConsolePostToolUseDecisionPresenter.ts # PostToolUse hook output
+    └── ConsoleReviewPresenter.ts             # Review command output formatting
 ```
 
 ### Dependency Injection Pattern
@@ -140,9 +151,10 @@ The system processes Claude Code hook events via stdin:
 Commands follow a hierarchical pattern using Commander.js:
 ```
 ccharness [command] [subcommand] [options]
-└── hook                       # Hook-related commands
-    ├── guard-commit          # Stop hook for commit reminders
-    └── review-reminder       # PostToolUse hook for review context
+├── hook                       # Hook-related commands
+│   ├── guard-commit          # Stop hook for commit reminders
+│   └── review-reminder       # PostToolUse hook for review context
+└── review                     # Standalone review command
 ```
 
 ### Use Case Layer Rules
@@ -222,7 +234,16 @@ Rolldown bundles the entire application into a single ESM file:
 
 ## Configuration
 
-The project supports a `ccharness.json` configuration file in the project root:
+The project supports configuration through JSON files in the project root:
+
+### Configuration Files
+
+- **`ccharness.json`**: Project-wide configuration that should be committed to version control
+- **`ccharness.local.json`**: Local overrides for personal preferences (ignored by git)
+
+When both files exist, `ccharness.local.json` settings will override `ccharness.json` settings.
+
+### Configuration Schema
 
 ```json
 {
@@ -230,20 +251,27 @@ The project supports a `ccharness.json` configuration file in the project root:
     "maxFiles": 10,     // Trigger reminder when files changed >= this value
     "maxLines": 500     // Trigger reminder when lines changed >= this value
   },
+  "review": {
+    "blockMode": false  // Block execution instead of providing additional context
+  },
   "rubrics": [          // Review rubric configurations
     {
-      "name": "vitest",
-      "pattern": "test/.*\\.test\\.ts$",  // Regex pattern to match files
-      "path": "docs/rubrics/vitest.md"    // Path to rubric document
+      "name": "Testing Quality",
+      "pattern": "tests\\/.*\\.(js|ts)$",  // Regex pattern to match files
+      "path": "docs/rubrics/testing.md"    // Path to rubric document
     }
   ]
 }
 ```
 
-Configuration precedence for commit guard:
-1. CLI options (`--max-files`, `--max-lines`)
-2. `ccharness.json` file (if CLI options are `-1` or not provided)
-3. Default value of `-1` (disabled)
+### Configuration Precedence
+
+Settings are resolved in the following order (highest to lowest priority):
+
+1. Command-line options (e.g., `--max-files`, `--max-lines`, `--block`)
+2. `ccharness.local.json` (local overrides)
+3. `ccharness.json` (project defaults)
+4. Built-in defaults
 
 ## Available Hooks
 
@@ -252,6 +280,9 @@ Blocks Claude Code and suggests committing when working directory has too many c
 
 ### Review Reminder (PostToolUse Hook)
 Adds context to remind Claude Code to review changes against configured rubrics after Write, Edit, or MultiEdit operations.
+
+### Review Command (Standalone)
+Evaluates a file against configured rubrics using Claude Code API integration, providing detailed feedback and scores.
 
 ## Key Design Decisions
 
