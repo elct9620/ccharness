@@ -23,6 +23,15 @@ export class ConsoleReviewPresenter implements ReviewPresenter {
       this.console.log(
         `${evaluation.name}: ${evaluation.score}/${evaluation.total} (${percentage}%)`,
       );
+
+      for (const item of evaluation.items) {
+        const itemText = `  - (${item.score}/${item.total})`;
+        if (item.comment) {
+          this.console.log(`${itemText} ${item.comment}`);
+        } else {
+          this.console.log(itemText);
+        }
+      }
     }
   }
 }

@@ -30,4 +30,8 @@ export class Evaluation {
 
     return (this.score / this.total) * 100;
   }
+
+  get items(): EvaluationItem[] {
+    return [...this._items];
+  }
 }

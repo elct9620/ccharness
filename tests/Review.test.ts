@@ -47,7 +47,7 @@ describe("Review", () => {
       await reviewAction("src/main.ts");
 
       await thenReviewOutputShouldBe(
-        "Review src/main.ts with rubric typescript\ntypescript: 1/1 (100%)",
+        "Review src/main.ts with rubric typescript\ntypescript: 1/1 (100%)\n  - (1/1)",
       );
     });
   });
@@ -77,7 +77,42 @@ describe("Review", () => {
       await reviewAction("src/main.ts");
 
       await thenReviewOutputShouldBe(
-        "Review src/main.ts with rubric typescript\nReview src/main.ts with rubric main\ntypescript: 1/1 (100%)\nmain: 1/1 (100%)",
+        "Review src/main.ts with rubric typescript\nReview src/main.ts with rubric main\ntypescript: 1/1 (100%)\n  - (1/1)\nmain: 1/1 (100%)\n  - (1/1)",
+      );
+    });
+  });
+
+  describe("when reviewing a file with evaluation items containing comments", () => {
+    it("is expected to output evaluation items with comments", async () => {
+      await givenConfig({
+        commit: { maxFiles: -1, maxLines: -1 },
+        rubrics: [
+          {
+            name: "testing",
+            pattern: "\\.test\\.ts$",
+            path: "docs/rubrics/testing.md",
+          },
+        ],
+      });
+      await givenReviewResult([
+        {
+          name: "testing",
+          items: [
+            {
+              score: 1,
+              total: 1,
+              comment: "Test case naming follows BDD format",
+            },
+            { score: 1, total: 1, comment: "Uses proper step functions" },
+            { score: 0, total: 1, comment: "Missing proper mocking strategy" },
+          ],
+        },
+      ]);
+
+      await reviewAction("src/example.test.ts");
+
+      await thenReviewOutputShouldBe(
+        "Review src/example.test.ts with rubric testing\ntesting: 2/3 (67%)\n  - (1/1) Test case naming follows BDD format\n  - (1/1) Uses proper step functions\n  - (0/1) Missing proper mocking strategy",
       );
     });
   });
