@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.0](https://github.com/elct9620/ccharness/compare/v0.5.0...v0.6.0) (2025-09-06)
+
+
+### Features
+
+* add local config support to JsonConfigService ([90f1c28](https://github.com/elct9620/ccharness/commit/90f1c28fa718e8c34a9035559a3fb88a9f8a7520))
+* add project configuration and update gitignore for local overrides ([d0d98a9](https://github.com/elct9620/ccharness/commit/d0d98a9b0a3955a4afc072c80433b171635be663))
+
 ## [0.5.0](https://github.com/elct9620/ccharness/compare/v0.4.0...v0.5.0) (2025-09-06)
 
 
