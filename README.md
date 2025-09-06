@@ -89,6 +89,9 @@ npx -y @aotoki/ccharness review src/main.ts --max-retry 5
 
 This command matches the file against rubric patterns defined in `ccharness.json` and provides evaluation results with scores and comments. If the review fails due to temporary errors, it will automatically retry up to the specified number of times.
 
+> [!NOTE]
+> Currently, the prompt for Claude Code cannot ensure output format. It may not work as expected after multiple retries.
+
 ## Configuration
 
 CCharness supports configuration through JSON files in your project root:

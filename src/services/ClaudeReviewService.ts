@@ -23,7 +23,7 @@ export class ClaudeReviewService implements ReviewService {
     for (let attempt = 1; attempt <= maxRetry; attempt++) {
       try {
         const result = await this.callAgent(
-          `Review the code at path: ${path} based on the following rubric: ${JSON.stringify(rubric)}. Provide your response in pure JSON format without any additional text or code blocks.`,
+          `Review the code at path: ${path} based on the following rubric: ${JSON.stringify(rubric)}. MUST respond in PURE JSON without any additional text, code blocks, or XML tags.`,
           config.claude,
         );
 
