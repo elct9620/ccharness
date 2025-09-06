@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.4.0](https://github.com/elct9620/ccharness/compare/v0.3.0...v0.4.0) (2025-09-06)
+
+
+### Features
+
+* add Evaluation and ReviewReport entities for review system ([5dff956](https://github.com/elct9620/ccharness/commit/5dff956a8e3a4cf0f61bcd3597bdaa1c7b34f9d3))
+* add review command for direct file evaluation ([ca1b958](https://github.com/elct9620/ccharness/commit/ca1b9589faea9be12e42db8cf974ef2fc82cb472))
+* implement ClaudeReviewService with Claude Code API integration ([fc3fe8c](https://github.com/elct9620/ccharness/commit/fc3fe8c3df9e22ead8c79f29006cd34ea50a2593))
+* inject ClaudeReviewService into ReviewCode use case ([434b21b](https://github.com/elct9620/ccharness/commit/434b21b475b8c92b59ad06b5dfb0a0ff15c825a7))
+
+
+### Bug Fixes
+
+* add build step before npm publish in release workflow ([991f40a](https://github.com/elct9620/ccharness/commit/991f40a47f236ec52caef054e4fe3f527dd1bc71))
+* correct export issues in ClaudeReviewService ([462e9c8](https://github.com/elct9620/ccharness/commit/462e9c814159ed358a906c58715a41200c8cdfee))
+
 ## [0.3.0](https://github.com/elct9620/ccharness/compare/v0.2.0...v0.3.0) (2025-09-03)
 
 ### Features
