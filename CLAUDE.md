@@ -211,12 +211,14 @@ Rolldown bundles the entire application into a single ESM file:
    - Handle hook-specific fields (e.g., `stopHookActive`, `toolName`)
 
 4. **Testing**:
+   - **TDD Approach**: Always write tests first (feature tests for handlers)
    - Test files use `.test.ts` extension in the `tests/` directory mirroring source structure
    - Use Vitest for unit and integration tests with setup file at `tests/setup.ts`
    - Test helpers follow BDD step pattern (e.g., `givenHookInput`, `thenHookOutputShouldBe`) located in `tests/steps/`
    - Mock external dependencies using DI container registration
    - Test naming follows `describe('Feature') > describe('when condition') > it('is expected to behavior')` pattern
    - Code must pass quality rubric (80%+ score) defined in `docs/rubrics/testing.md`
+   - Primary tests are feature tests in `tests/` for handlers unless specifically asked otherwise
 
 ## Configuration
 
@@ -261,3 +263,4 @@ Adds context to remind Claude Code to review changes against configured rubrics 
 - **Builder Pattern**: `JsonWorkingStateBuilder` for flexible state construction with config support
 - **Repository Pattern**: `JsonRubricRepository` for abstracted data access
 - **Step Pattern for Tests**: Provides readable test structure with given-when-then style helpers
+- **TDD Development**: Use Test-Driven Development approach - write tests first, then implementation
