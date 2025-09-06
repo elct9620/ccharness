@@ -140,4 +140,4 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 # ccharness config
-ccharness.json
+ccharness.local.json
