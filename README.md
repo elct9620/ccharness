@@ -80,7 +80,16 @@ This command matches the file against rubric patterns defined in `ccharness.json
 
 ## Configuration
 
-The most config can use `ccharness.json` in project root to customize the behavior.
+CCharness supports configuration through JSON files in your project root:
+
+### Configuration Files
+
+- **`ccharness.json`**: Project-wide configuration that should be committed to version control
+- **`ccharness.local.json`**: Local overrides for personal preferences (ignored by git)
+
+When both files exist, `ccharness.local.json` settings will override `ccharness.json` settings.
+
+### Configuration Schema
 
 ```json
 {
@@ -100,3 +109,12 @@ The most config can use `ccharness.json` in project root to customize the behavi
   ]
 }
 ```
+
+### Configuration Precedence
+
+Settings are resolved in the following order (highest to lowest priority):
+
+1. Command-line options (e.g., `--max-files`, `--max-lines`)
+2. `ccharness.local.json` (local overrides)
+3. `ccharness.json` (project defaults)
+4. Built-in defaults
