@@ -22,6 +22,9 @@ export class ReviewCode {
     const rubrics = await this.rubricRepository.matches(input.filePath);
 
     for (const rubric of rubrics) {
+      await this.reviewPresenter.progress(
+        `Review ${input.filePath} with rubric ${rubric.name}`,
+      );
       const evaluation = await this.reviewService.review(
         input.filePath,
         rubric,

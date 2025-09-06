@@ -48,5 +48,6 @@ export interface RubricRepository {
 
 export const IReviewPresenter = Symbol("IReviewPresenter");
 export interface ReviewPresenter {
+  progress(status: string): Promise<void>;
   display(report: ReviewReport): Promise<void>;
 }

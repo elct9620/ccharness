@@ -8,6 +8,10 @@ import type { ReviewPresenter } from "@/usecases/interface";
 export class ConsoleReviewPresenter implements ReviewPresenter {
   constructor(@inject(IConsole) private readonly console: Console) {}
 
+  async progress(status: string): Promise<void> {
+    this.console.log(status);
+  }
+
   async display(report: ReviewReport): Promise<void> {
     if (report.isEmpty) {
       this.console.log("No matching rubrics found for this file");

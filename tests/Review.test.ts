@@ -46,7 +46,9 @@ describe("Review", () => {
 
       await reviewAction("src/main.ts");
 
-      await thenReviewOutputShouldBe("typescript: 1/1 (100%)");
+      await thenReviewOutputShouldBe(
+        "Review src/main.ts with rubric typescript\ntypescript: 1/1 (100%)",
+      );
     });
   });
 
@@ -75,7 +77,7 @@ describe("Review", () => {
       await reviewAction("src/main.ts");
 
       await thenReviewOutputShouldBe(
-        "typescript: 1/1 (100%)\nmain: 1/1 (100%)",
+        "Review src/main.ts with rubric typescript\nReview src/main.ts with rubric main\ntypescript: 1/1 (100%)\nmain: 1/1 (100%)",
       );
     });
   });
