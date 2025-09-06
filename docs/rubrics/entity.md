@@ -47,7 +47,7 @@ export class Review {
 
 ### Identity (1 points)
 
-When defining an entity, ensure it has a unique identifier that distinguishes it from other instances.
+When defining an entity with a unique identity, ensure that the identity is clearly defined and immutable.
 
 ```ts
 export class Review {
@@ -65,7 +65,7 @@ export class Review {
 
 - The entity has a unique identifier (e.g., `id`) or anything that can uniquely identify it.
 - The identity is immutable and does not change over the entity's lifecycle.
-- Give score if not a entity but a value object.
+- If no unique identifier, review is a value object and give this critera directly.
 
 ### Immutable Value Objects (1 points)
 
