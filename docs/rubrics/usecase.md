@@ -66,6 +66,7 @@ export class ReviewCode {
 
 - Define input types (e.g., `ReviewCodeInput`) to encapsulate all parameters.
 - Use presenter interface to output if necessary.
+- The input model only used by the use case and defined in the same file.
 
 ## Scoring
 

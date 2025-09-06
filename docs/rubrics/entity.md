@@ -65,6 +65,7 @@ export class Review {
 
 - The entity has a unique identifier (e.g., `id`) or anything that can uniquely identify it.
 - The identity is immutable and does not change over the entity's lifecycle.
+- Give score if not a entity but a value object.
 
 ### Immutable Value Objects (1 points)
 
@@ -85,6 +86,7 @@ export class Evaluation {
 
 - All properties of the value object are readonly.
 - Methods that would modify the state return a new instance instead.
+- Give score if not a value object but an entity.
 
 ### Value Object over primitive (1 points)
 
