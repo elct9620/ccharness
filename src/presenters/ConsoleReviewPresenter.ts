@@ -60,6 +60,7 @@ export class ConsoleReviewPresenter implements ReviewPresenter {
           title: "Criteria",
           alignment: "left",
           color: "cyan",
+          maxLen: 10,
         },
         { name: "score", title: "Score", alignment: "center" },
         { name: "total", title: "Total", alignment: "center" },
