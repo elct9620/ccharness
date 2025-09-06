@@ -40,7 +40,9 @@ export async function thenReviewOutputShouldBe(expectedOutput: string) {
   expect(testConsole.outputString).toBe(expected);
 }
 
-export async function thenReviewOutputShouldContain(expectedText: string) {
+export async function thenReviewOutputShouldContain(
+  expectedText: string | RegExp,
+) {
   const testConsole = container.resolve<TestConsole>(IConsole);
-  expect(testConsole.outputString).toContain(expectedText);
+  expect(testConsole.outputString).toMatch(expectedText);
 }

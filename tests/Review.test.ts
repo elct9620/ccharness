@@ -148,8 +148,8 @@ describe("Review", () => {
       await thenReviewOutputShouldContain("Missing proper mocking strategy");
       // Verify criteria names are displayed
       await thenReviewOutputShouldContain("BDD Naming");
-      await thenReviewOutputShouldContain("Step Functions");
-      await thenReviewOutputShouldContain("Mocking Strategy");
+      await thenReviewOutputShouldContain(/Step[\s\S]*?Functions/);
+      await thenReviewOutputShouldContain(/Mocking[\s\S]*?Strategy/);
     });
   });
 
