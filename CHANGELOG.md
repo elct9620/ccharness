@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.5.0](https://github.com/elct9620/ccharness/compare/v0.4.0...v0.5.0) (2025-09-06)
+
+
+### Features
+
+* add configurable Claude executable path support ([8bcadfb](https://github.com/elct9620/ccharness/commit/8bcadfbd892db340f3457504fa648925a332bec6))
+* add console-table-printer dependency ([92973e5](https://github.com/elct9620/ccharness/commit/92973e5ec533d49496cc411a0c7053815d76f599))
+* add detailed evaluation items display to ReviewCode output ([7f31964](https://github.com/elct9620/ccharness/commit/7f31964c6104b2472b5593891e19a52cb874d732))
+* add progress tracking to ReviewCode use case ([1f81256](https://github.com/elct9620/ccharness/commit/1f812566bd02ec772e556ffdb64289ed158c051e))
+* replace console.log with console-table-printer for review reports ([86c111f](https://github.com/elct9620/ccharness/commit/86c111f697ed354ae7fb01124deed49c3224214a))
+
 ## [0.4.0](https://github.com/elct9620/ccharness/compare/v0.3.0...v0.4.0) (2025-09-06)
 
 
