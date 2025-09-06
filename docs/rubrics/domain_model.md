@@ -49,6 +49,37 @@ export class WorkingState {
 - Relevant data and methods are encapsulated within the same class.
 - Classes have clear responsibilities and do not rely on external state.
 
+### Minimal Implementation (1 points)
+
+The domain model should implement only the necessary features required by other parts of the system. Avoid over-engineering or adding unnecessary complexity.
+
+```ts
+// Entity (Value Object)
+export class Criteria {
+    constructor(
+      public readonly name: string,
+      public readonly comment?: string,
+    ) {}
+
+    withComment(comment: string): Criteria { // No one uses this method, do not implement it
+        return new Criteria(this.name, comment);
+    }
+}
+
+// Use Case
+export class ReviewCode {
+    async execute(code: string): Promise<Evaluation> {
+        // ...
+        const criteria = new Criteria("Code Quality");
+        evaluation.addCriteria(criteria);
+        // ...
+    }
+}
+```
+
+- Only essential properties and methods are included in each class.
+- Cohorse and focused design without unnecessary abstractions.
+
 ## Scoring
 
 Each criterion only get the point when it is fully satisfied, otherwise get 0 point.
