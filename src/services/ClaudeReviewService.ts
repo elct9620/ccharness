@@ -52,9 +52,8 @@ export class ClaudeReviewService implements ReviewService {
       }
     }
 
-    // All retries exhausted, return fallback evaluation
+    // All retries exhausted, return empty evaluation
     const evaluation = new Evaluation(rubric.name);
-    evaluation.add(new Criteria("Fallback", 0, 0));
     return evaluation;
   }
 

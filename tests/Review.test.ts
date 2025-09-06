@@ -187,7 +187,7 @@ describe("Review", () => {
     });
 
     describe("when all retries are exhausted", () => {
-      it("is expected to return fallback evaluation", async () => {
+      it("is expected to return empty evaluation", async () => {
         await givenConfig({
           commit: { maxFiles: -1, maxLines: -1 },
           rubrics: [
