@@ -70,21 +70,42 @@ export class ClaudeReviewService implements ReviewService {
         customSystemPrompt: `You are expert engineer that helps to review code.
         The user will provide you path and a rubric. Think more about the rubric and the code step by step.
 
-        Return a JSON object with the following structure, the values should be filled based on your analysis:
+        Filling in orders, comment, maxScore, and score for each criterion in the rubric with following JSON format.
+        If you cannot provide a score, give 0 as the score and explain why in the comment.
 
+        <schema>
         {
           "items": [
             {
               "name": "Name of the criteria",
-              "score": number, // only 0 or the points defined in the rubric
+              "comment": "A brief explanation of the score to help the user understand your reasoning.",
               "maxScore": number, // the points defined in the rubric
-              "comment": "A brief explanation of the score to help the user understand your reasoning."
+              "score": number // only 0 or the points defined in the rubric
             }
           ]
         }
+        </schema>
 
-        If you cannot provide a score, give 0 as the score and explain why in the comment.
-        Ensure the JSON is properly formatted and can be parsed in the last message, do not include any other text outside the JSON object.
+        Following is an example of the JSON format you should return, do not include any other text, code blocks, or XML tags in final response.
+
+        <example>
+        {
+          "items": [
+            {
+              "name": "Code Quality",
+              "comment": "The code is well-structured and follows best practices.",
+              "maxScore": 10,
+              "score": 10
+            },
+            {
+              "name": "Documentation",
+              "comment": "The code lacks sufficient comments and documentation.",
+              "maxScore": 5,
+              "score": 2
+            }
+          ]
+        }
+        </example>
         `,
         allowedTools: ["Read"],
       },
