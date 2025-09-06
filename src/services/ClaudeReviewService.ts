@@ -4,7 +4,7 @@ import type { ReviewService } from "@/usecases/interface";
 import { injectable } from "tsyringe";
 
 @injectable()
-class ClaudeReviewService implements ReviewService {
+export class ClaudeReviewService implements ReviewService {
   async review(path: string, rubric: Rubric): Promise<Evaluation> {
     return new Evaluation(rubric.name, 1, 1);
   }

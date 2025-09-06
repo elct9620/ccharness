@@ -3,7 +3,7 @@ import { container } from "tsyringe";
 import { ConsoleReviewPresenter } from "@/presenters/ConsoleReviewPresenter";
 import { JsonRubricRepository } from "@/repositories/JsonRubricRepository";
 import { ReviewCode } from "@/usecases/ReviewCode";
-import { IReviewService, ReviewService } from "@/usecases/interface";
+import { IReviewService, type ReviewService } from "@/usecases/interface";
 
 export async function reviewAction(path: string) {
   const rubricRepository = container.resolve(JsonRubricRepository);
