@@ -1,3 +1,4 @@
+import type { Evaluation } from "@/entities/Evaluation";
 import type { ReviewReport } from "@/entities/ReviewReport";
 import type { Rubric } from "@/entities/Rubric";
 import type { WorkingState } from "@/entities/WorkingState";
@@ -8,6 +9,11 @@ export interface GitService {
   countChangedFiles(): Promise<number>;
   countChangedLines(): Promise<number>;
   countUntrackedLines(): Promise<number>;
+}
+
+export const IReviewService = Symbol("IReviewService");
+export interface ReviewService {
+  review(path: string, rubric: Rubric): Promise<Evaluation>;
 }
 
 export const IWorkingStateBuilder = Symbol("IWorkingStateBuilder");

@@ -3,10 +3,12 @@ import { container } from "tsyringe";
 import { ConsoleReviewPresenter } from "@/presenters/ConsoleReviewPresenter";
 import { JsonRubricRepository } from "@/repositories/JsonRubricRepository";
 import { ReviewCode } from "@/usecases/ReviewCode";
+import { IReviewService, ReviewService } from "@/usecases/interface";
 
 export async function reviewAction(path: string) {
   const rubricRepository = container.resolve(JsonRubricRepository);
+  const reviewService = container.resolve<ReviewService>(IReviewService);
   const presenter = container.resolve(ConsoleReviewPresenter);
-  const usecase = new ReviewCode(rubricRepository, presenter);
+  const usecase = new ReviewCode(rubricRepository, reviewService, presenter);
   await usecase.execute({ filePath: path });
 }

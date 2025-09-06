@@ -2,7 +2,10 @@ import { describe, it } from "vitest";
 
 import { reviewAction } from "@/handlers/Review";
 import { givenConfig } from "tests/steps/common";
-import { thenReviewOutputShouldBe } from "tests/steps/review";
+import {
+  givenReviewService,
+  thenReviewOutputShouldBe,
+} from "tests/steps/review";
 
 describe("Review", () => {
   describe("when reviewing a file without matching rubrics", () => {
@@ -17,6 +20,7 @@ describe("Review", () => {
           },
         ],
       });
+      await givenReviewService();
 
       await reviewAction("src/main.ts");
 
@@ -36,6 +40,7 @@ describe("Review", () => {
           },
         ],
       });
+      await givenReviewService();
 
       await reviewAction("src/main.ts");
 
@@ -60,6 +65,7 @@ describe("Review", () => {
           },
         ],
       });
+      await givenReviewService();
 
       await reviewAction("src/main.ts");
 

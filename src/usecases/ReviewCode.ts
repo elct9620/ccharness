@@ -1,7 +1,10 @@
-import { Evaluation } from "@/entities/Evaluation";
 import { ReviewReport } from "@/entities/ReviewReport";
 
-import type { ReviewPresenter, RubricRepository } from "./interface";
+import type {
+  ReviewPresenter,
+  ReviewService,
+  RubricRepository,
+} from "./interface";
 
 export type ReviewCodeInput = {
   filePath: string;
@@ -10,6 +13,7 @@ export type ReviewCodeInput = {
 export class ReviewCode {
   constructor(
     private readonly rubricRepository: RubricRepository,
+    private readonly reviewService: ReviewService,
     private readonly reviewPresenter: ReviewPresenter,
   ) {}
 
@@ -18,7 +22,10 @@ export class ReviewCode {
     const rubrics = await this.rubricRepository.matches(input.filePath);
 
     for (const rubric of rubrics) {
-      const evaluation = new Evaluation(rubric.name, 1, 1);
+      const evaluation = await this.reviewService.review(
+        input.filePath,
+        rubric,
+      );
       report.addEvaluation(evaluation);
     }
 
