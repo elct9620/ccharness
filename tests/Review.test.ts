@@ -3,7 +3,7 @@ import { describe, it } from "vitest";
 import { reviewAction } from "@/handlers/Review";
 import { givenConfig } from "tests/steps/common";
 import {
-  givenReviewService,
+  givenReviewResult,
   thenReviewOutputShouldBe,
 } from "tests/steps/review";
 
@@ -20,7 +20,7 @@ describe("Review", () => {
           },
         ],
       });
-      await givenReviewService();
+      await givenReviewResult([]);
 
       await reviewAction("src/main.ts");
 
@@ -40,7 +40,9 @@ describe("Review", () => {
           },
         ],
       });
-      await givenReviewService();
+      await givenReviewResult([
+        { name: "typescript", items: [{ score: 1, total: 1 }] },
+      ]);
 
       await reviewAction("src/main.ts");
 
@@ -65,7 +67,10 @@ describe("Review", () => {
           },
         ],
       });
-      await givenReviewService();
+      await givenReviewResult([
+        { name: "typescript", items: [{ score: 1, total: 1 }] },
+        { name: "main", items: [{ score: 1, total: 1 }] },
+      ]);
 
       await reviewAction("src/main.ts");
 

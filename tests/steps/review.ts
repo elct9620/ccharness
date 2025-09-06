@@ -1,20 +1,21 @@
 import type { TestConsole } from "tests/support/TestConsole";
-import { TestReviewService } from "tests/support/TestReviewService";
+import {
+  TestReviewService,
+  type EvaluationData,
+} from "tests/support/TestReviewService";
 import { container } from "tsyringe";
-import { expect, vi } from "vitest";
+import { expect } from "vitest";
 
 import { IConsole } from "@/token";
 import { IReviewService } from "@/usecases/interface";
 
-export async function givenReviewService() {
+export async function givenReviewResult(evaluations: EvaluationData[]) {
   const reviewService = new TestReviewService();
+  reviewService.setEvaluationData(evaluations);
 
-  const spy = vi.spyOn(reviewService, "review");
   container.register(IReviewService, {
     useValue: reviewService,
   });
-
-  return spy;
 }
 
 export async function thenReviewOutputShouldBe(expectedOutput: string) {
