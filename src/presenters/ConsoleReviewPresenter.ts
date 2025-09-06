@@ -9,15 +9,15 @@ export class ConsoleReviewPresenter implements ReviewPresenter {
   constructor(@inject(IConsole) private readonly console: Console) {}
 
   async display(report: ReviewReport): Promise<void> {
-    const evaluation = report.evaluations[0];
-    if (!evaluation) {
-      this.console.log("No evaluations available");
+    if (report.evaluations.length === 0) {
       return;
     }
 
-    const percentage = Math.round(evaluation.passRate);
-    this.console.log(
-      `${evaluation.name}: ${evaluation.score}/${evaluation.total} (${percentage}%)`,
-    );
+    for (const evaluation of report.evaluations) {
+      const percentage = Math.round(evaluation.passRate);
+      this.console.log(
+        `${evaluation.name}: ${evaluation.score}/${evaluation.total} (${percentage}%)`,
+      );
+    }
   }
 }
