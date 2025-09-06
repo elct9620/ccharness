@@ -1,7 +1,7 @@
 import { query } from "@anthropic-ai/claude-code";
 import { inject, injectable } from "tsyringe";
 
-import { Evaluation } from "@/entities/Evaluation";
+import { Evaluation, EvaluationItem } from "@/entities/Evaluation";
 import type { Rubric } from "@/entities/Rubric";
 import { IConfigService } from "@/token";
 import type { ReviewService } from "@/usecases/interface";
@@ -20,21 +20,27 @@ export class ClaudeReviewService implements ReviewService {
     );
     try {
       const parsed = JSON.parse(result);
-      const totalPoints = parsed.items.reduce(
-        (sum: number, item: any) => sum + (item.score || 0),
-        0,
-      );
-      const score = parsed.items.reduce(
-        (sum: number, item: any) => sum + (item.maxScore || 0),
-        0,
-      );
+      const evaluation = new Evaluation(rubric.name);
 
-      return new Evaluation(rubric.name, score, totalPoints);
+      for (const item of parsed.items) {
+        const evaluationItem = new EvaluationItem(
+          item.score || 0,
+          item.maxScore || 0,
+          item.comment,
+        );
+        evaluation.add(evaluationItem);
+      }
+
+      return evaluation;
     } catch (error) {
-      return new Evaluation(rubric.name, 0, 0);
+      const evaluation = new Evaluation(rubric.name);
+      evaluation.add(new EvaluationItem(0, 0));
+      return evaluation;
     }
 
-    return new Evaluation(rubric.name, 1, 1);
+    const evaluation = new Evaluation(rubric.name);
+    evaluation.add(new EvaluationItem(1, 1));
+    return evaluation;
   }
 
   private async callAgent(
