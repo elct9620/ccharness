@@ -64,6 +64,20 @@ Options:
 
 > Currently, we only add context to remind agent we have rubric document, and use it to review the changes.
 
+## Review (Experimental)
+
+Review a file against configured rubrics to get evaluation scores and feedback.
+
+```bash
+npx -y @aotoki/ccharness review <path>
+```
+
+Arguments:
+
+- `<path>`: Path to the file to review against configured rubrics
+
+This command matches the file against rubric patterns defined in `ccharness.json` and provides evaluation results with scores and comments.
+
 ## Configuration
 
 The most config can use `ccharness.json` in project root to customize the behavior.
