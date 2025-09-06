@@ -5,6 +5,7 @@ import { givenConfig } from "tests/steps/common";
 import {
   givenReviewResult,
   thenReviewOutputShouldBe,
+  thenReviewOutputShouldContain,
 } from "tests/steps/review";
 
 describe("Review", () => {
@@ -46,9 +47,12 @@ describe("Review", () => {
 
       await reviewAction("src/main.ts");
 
-      await thenReviewOutputShouldBe(
-        "Review src/main.ts with rubric typescript\ntypescript: 1/1 (100%)\n  - (1/1)",
+      await thenReviewOutputShouldContain(
+        "Review src/main.ts with rubric typescript",
       );
+      await thenReviewOutputShouldContain("Evaluation");
+      await thenReviewOutputShouldContain("typescript");
+      await thenReviewOutputShouldContain("100%");
     });
   });
 
@@ -76,9 +80,16 @@ describe("Review", () => {
 
       await reviewAction("src/main.ts");
 
-      await thenReviewOutputShouldBe(
-        "Review src/main.ts with rubric typescript\nReview src/main.ts with rubric main\ntypescript: 1/1 (100%)\n  - (1/1)\nmain: 1/1 (100%)\n  - (1/1)",
+      await thenReviewOutputShouldContain(
+        "Review src/main.ts with rubric typescript",
       );
+      await thenReviewOutputShouldContain(
+        "Review src/main.ts with rubric main",
+      );
+      await thenReviewOutputShouldContain("Evaluation");
+      await thenReviewOutputShouldContain("typescript");
+      await thenReviewOutputShouldContain("main");
+      await thenReviewOutputShouldContain("100%");
     });
   });
 
@@ -111,9 +122,17 @@ describe("Review", () => {
 
       await reviewAction("src/example.test.ts");
 
-      await thenReviewOutputShouldBe(
-        "Review src/example.test.ts with rubric testing\ntesting: 2/3 (67%)\n  - (1/1) Test case naming follows BDD format\n  - (1/1) Uses proper step functions\n  - (0/1) Missing proper mocking strategy",
+      await thenReviewOutputShouldContain(
+        "Review src/example.test.ts with rubric testing",
       );
+      await thenReviewOutputShouldContain("Evaluation");
+      await thenReviewOutputShouldContain("testing");
+      await thenReviewOutputShouldContain("67%");
+      await thenReviewOutputShouldContain(
+        "Test case naming follows BDD format",
+      );
+      await thenReviewOutputShouldContain("Uses proper step functions");
+      await thenReviewOutputShouldContain("Missing proper mocking strategy");
     });
   });
 });

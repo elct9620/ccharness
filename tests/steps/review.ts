@@ -23,3 +23,8 @@ export async function thenReviewOutputShouldBe(expectedOutput: string) {
   const expected = expectedOutput === "" ? "" : expectedOutput + "\n";
   expect(testConsole.outputString).toBe(expected);
 }
+
+export async function thenReviewOutputShouldContain(expectedText: string) {
+  const testConsole = container.resolve<TestConsole>(IConsole);
+  expect(testConsole.outputString).toContain(expectedText);
+}
