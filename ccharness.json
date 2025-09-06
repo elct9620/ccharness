@@ -11,6 +11,21 @@
       "name": "Testing Quality",
       "pattern": "tests\/.*\\.(js|ts)$",
       "path": "docs/rubrics/testing.md"
+    },
+    {
+      "name": "Domain Model",
+      "pattern": "(entities|usecases)\/.*\\.(js|ts)$",
+      "path": "docs/rubrics/domain_model.md"
+    },
+    {
+      "name": "Use Case",
+      "pattern": "usecases\/.*\\.(js|ts)$",
+      "path": "docs/rubrics/usecase.md"
+    },
+    {
+      "name": "Entity",
+      "pattern": "entities\/.*\\.(js|ts)$",
+      "path": "docs/rubrics/entity.md"
     }
   ]
 }
