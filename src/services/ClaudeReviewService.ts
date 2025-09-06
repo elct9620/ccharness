@@ -1,15 +1,22 @@
 import { query } from "@anthropic-ai/claude-code";
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 
 import { Evaluation } from "@/entities/Evaluation";
 import type { Rubric } from "@/entities/Rubric";
+import { IConfigService } from "@/token";
 import type { ReviewService } from "@/usecases/interface";
+import type { ConfigService } from "./interface";
 
 @injectable()
 export class ClaudeReviewService implements ReviewService {
+  constructor(@inject(IConfigService) private configService: ConfigService) {}
+
   async review(path: string, rubric: Rubric): Promise<Evaluation> {
+    const config = await this.configService.load();
+
     const result = await this.callAgent(
       `Review the code at path: ${path} based on the following rubric: ${JSON.stringify(rubric)}. Provide your response in pure JSON format without any additional text or code blocks.`,
+      config.claude,
     );
     try {
       const parsed = JSON.parse(result);
@@ -30,13 +37,17 @@ export class ClaudeReviewService implements ReviewService {
     return new Evaluation(rubric.name, 1, 1);
   }
 
-  private async callAgent(prompt: string): Promise<string> {
+  private async callAgent(
+    prompt: string,
+    options?: { executablePath?: string },
+  ): Promise<string> {
     for await (const message of query({
       prompt,
       options: {
         model: "sonnet",
         maxTurns: 50,
         hooks: {},
+        pathToClaudeCodeExecutable: options?.executablePath!,
         customSystemPrompt: `You are expert engineer that helps to review code.
         The user will provide you path and a rubric. Think more about the rubric and the code step by step.
 

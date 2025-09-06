@@ -1,6 +1,9 @@
 export const CONFIG_FILE_NAME = "ccharness.json";
 
 export type ConfigSchema = {
+  claude?: {
+    executablePath?: string;
+  };
   commit: {
     maxFiles: number;
     maxLines: number;
