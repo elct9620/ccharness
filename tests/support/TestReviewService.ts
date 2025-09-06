@@ -1,8 +1,10 @@
-import { Evaluation, EvaluationItem } from "@/entities/Evaluation";
+import { Criteria } from "@/entities/Criteria";
+import { Evaluation } from "@/entities/Evaluation";
 import type { ReviewService } from "@/usecases/interface";
 import { injectable } from "tsyringe";
 
-export type EvaluationItemData = {
+export type CriteriaData = {
+  name: string;
   score: number;
   total: number;
   comment?: string;
@@ -10,12 +12,12 @@ export type EvaluationItemData = {
 
 export type EvaluationData = {
   name: string;
-  items: EvaluationItemData[];
+  items: CriteriaData[];
 };
 
 @injectable()
 export class TestReviewService implements ReviewService {
-  private evaluationDataMap = new Map<string, EvaluationItemData[]>();
+  private evaluationDataMap = new Map<string, CriteriaData[]>();
   private failureMap = new Map<string, number>();
   private attemptCountMap = new Map<string, number>();
 
@@ -54,12 +56,13 @@ export class TestReviewService implements ReviewService {
 
         const evaluation = new Evaluation(rubric.name);
         const itemsData = this.evaluationDataMap.get(rubric.name) || [
-          { score: 1, total: 1 },
+          { name: "Default", score: 1, total: 1 },
         ];
 
         for (const itemData of itemsData) {
           evaluation.add(
-            new EvaluationItem(
+            new Criteria(
+              itemData.name,
               itemData.score,
               itemData.total,
               itemData.comment,
@@ -80,7 +83,7 @@ export class TestReviewService implements ReviewService {
 
     // All retries exhausted, return fallback evaluation
     const evaluation = new Evaluation(rubric.name);
-    evaluation.add(new EvaluationItem(0, 0));
+    evaluation.add(new Criteria("Fallback", 0, 0));
     return evaluation;
   }
 }

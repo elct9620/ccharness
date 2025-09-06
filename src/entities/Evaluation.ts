@@ -1,17 +1,11 @@
-export class EvaluationItem {
-  constructor(
-    public readonly score: number,
-    public readonly total: number,
-    public readonly comment?: string,
-  ) {}
-}
+import { Criteria } from "./Criteria";
 
 export class Evaluation {
-  private readonly _items: EvaluationItem[] = [];
+  private readonly _items: Criteria[] = [];
 
   constructor(public readonly name: string) {}
 
-  add(item: EvaluationItem): void {
+  add(item: Criteria): void {
     this._items.push(item);
   }
 
@@ -31,7 +25,7 @@ export class Evaluation {
     return (this.score / this.total) * 100;
   }
 
-  get items(): EvaluationItem[] {
+  get items(): Criteria[] {
     return [...this._items];
   }
 }

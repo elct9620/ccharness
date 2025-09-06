@@ -1,7 +1,8 @@
 import { query } from "@anthropic-ai/claude-code";
 import { inject, injectable } from "tsyringe";
 
-import { Evaluation, EvaluationItem } from "@/entities/Evaluation";
+import { Criteria } from "@/entities/Criteria";
+import { Evaluation } from "@/entities/Evaluation";
 import type { Rubric } from "@/entities/Rubric";
 import { IConfigService } from "@/token";
 import type { ReviewService } from "@/usecases/interface";
@@ -31,7 +32,8 @@ export class ClaudeReviewService implements ReviewService {
         const evaluation = new Evaluation(rubric.name);
 
         for (const item of parsed.items) {
-          const evaluationItem = new EvaluationItem(
+          const evaluationItem = new Criteria(
+            item.name || "Unknown",
             item.score || 0,
             item.maxScore || 0,
             item.comment,
@@ -52,7 +54,7 @@ export class ClaudeReviewService implements ReviewService {
 
     // All retries exhausted, return fallback evaluation
     const evaluation = new Evaluation(rubric.name);
-    evaluation.add(new EvaluationItem(0, 0));
+    evaluation.add(new Criteria("Fallback", 0, 0));
     return evaluation;
   }
 
