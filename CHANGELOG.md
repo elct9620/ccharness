@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.7.0](https://github.com/elct9620/ccharness/compare/v0.6.0...v0.7.0) (2025-09-06)
+
+
+### Features
+
+* add domain-focused quality rubrics for entities and use cases ([b670df6](https://github.com/elct9620/ccharness/commit/b670df66ec144f01209b612bec7a20e23d5c75e0))
+* add retry functionality to ClaudeReviewService ([5f9ae4b](https://github.com/elct9620/ccharness/commit/5f9ae4bd903e1c94882b970aacb57144743e6397))
+
+
+### Bug Fixes
+
+* improve Claude API prompt for more reliable JSON parsing ([32d1807](https://github.com/elct9620/ccharness/commit/32d18074054b8a23e2c16d5dee46c12db99254c4))
+
 ## [0.6.0](https://github.com/elct9620/ccharness/compare/v0.5.0...v0.6.0) (2025-09-06)
 
 
