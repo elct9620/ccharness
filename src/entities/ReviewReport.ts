@@ -7,6 +7,10 @@ export class ReviewReport {
     return [...this._evaluations];
   }
 
+  get isEmpty(): boolean {
+    return this._evaluations.length === 0;
+  }
+
   addEvaluation(evaluation: Evaluation): void {
     this._evaluations.push(evaluation);
   }

@@ -9,7 +9,8 @@ export class ConsoleReviewPresenter implements ReviewPresenter {
   constructor(@inject(IConsole) private readonly console: Console) {}
 
   async display(report: ReviewReport): Promise<void> {
-    if (report.evaluations.length === 0) {
+    if (report.isEmpty) {
+      this.console.log("No matching rubrics found for this file");
       return;
     }
 

@@ -6,7 +6,7 @@ import { thenReviewOutputShouldBe } from "tests/steps/review";
 
 describe("Review", () => {
   describe("when reviewing a file without matching rubrics", () => {
-    it("is expected to output nothing", async () => {
+    it("is expected to output no matching rubrics message", async () => {
       await givenConfig({
         commit: { maxFiles: -1, maxLines: -1 },
         rubrics: [
@@ -20,7 +20,7 @@ describe("Review", () => {
 
       await reviewAction("src/main.ts");
 
-      await thenReviewOutputShouldBe("");
+      await thenReviewOutputShouldBe("No matching rubrics found for this file");
     });
   });
 
