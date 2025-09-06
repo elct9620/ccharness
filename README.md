@@ -69,14 +69,25 @@ Options:
 Review a file against configured rubrics to get evaluation scores and feedback.
 
 ```bash
-npx -y @aotoki/ccharness review <path>
+npx -y @aotoki/ccharness review <path> [options]
 ```
 
 Arguments:
 
 - `<path>`: Path to the file to review against configured rubrics
 
-This command matches the file against rubric patterns defined in `ccharness.json` and provides evaluation results with scores and comments.
+Options:
+
+- `--max-retry <number>`: Maximum number of retry attempts if the review encounters errors. Default is `3`.
+
+Example:
+
+```bash
+# Review with custom retry limit
+npx -y @aotoki/ccharness review src/main.ts --max-retry 5
+```
+
+This command matches the file against rubric patterns defined in `ccharness.json` and provides evaluation results with scores and comments. If the review fails due to temporary errors, it will automatically retry up to the specified number of times.
 
 ## Configuration
 
