@@ -8,6 +8,7 @@ import type {
 
 export type ReviewCodeInput = {
   filePath: string;
+  maxRetry?: number;
 };
 
 export class ReviewCode {
@@ -28,6 +29,7 @@ export class ReviewCode {
       const evaluation = await this.reviewService.review(
         input.filePath,
         rubric,
+        input.maxRetry,
       );
       report.addEvaluation(evaluation);
     }

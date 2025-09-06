@@ -18,6 +18,22 @@ export async function givenReviewResult(evaluations: EvaluationData[]) {
   });
 }
 
+export async function givenReviewFailures(
+  rubricName: string,
+  failureCount: number,
+) {
+  const reviewService = container.resolve<TestReviewService>(IReviewService);
+  reviewService.setFailureCount(rubricName, failureCount);
+}
+
+export async function thenReviewAttemptCountShouldBe(
+  rubricName: string,
+  expectedCount: number,
+) {
+  const reviewService = container.resolve<TestReviewService>(IReviewService);
+  expect(reviewService.getAttemptCount(rubricName)).toBe(expectedCount);
+}
+
 export async function thenReviewOutputShouldBe(expectedOutput: string) {
   const testConsole = container.resolve<TestConsole>(IConsole);
   const expected = expectedOutput === "" ? "" : expectedOutput + "\n";

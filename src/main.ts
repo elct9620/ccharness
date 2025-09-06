@@ -45,6 +45,11 @@ hook
 program
   .command("review")
   .argument("<path>", "Path to the file to review")
+  .option(
+    "--max-retry <number>",
+    "Maximum number of retry attempts for review",
+    "3",
+  )
   .description("Review a file against configured rubrics")
   .action(reviewAction);
 

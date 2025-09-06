@@ -11,35 +11,48 @@ import type { ConfigService } from "./interface";
 export class ClaudeReviewService implements ReviewService {
   constructor(@inject(IConfigService) private configService: ConfigService) {}
 
-  async review(path: string, rubric: Rubric): Promise<Evaluation> {
+  async review(
+    path: string,
+    rubric: Rubric,
+    maxRetry: number = 3,
+  ): Promise<Evaluation> {
     const config = await this.configService.load();
 
-    const result = await this.callAgent(
-      `Review the code at path: ${path} based on the following rubric: ${JSON.stringify(rubric)}. Provide your response in pure JSON format without any additional text or code blocks.`,
-      config.claude,
-    );
-    try {
-      const parsed = JSON.parse(result);
-      const evaluation = new Evaluation(rubric.name);
+    let lastError: Error | null = null;
 
-      for (const item of parsed.items) {
-        const evaluationItem = new EvaluationItem(
-          item.score || 0,
-          item.maxScore || 0,
-          item.comment,
+    for (let attempt = 1; attempt <= maxRetry; attempt++) {
+      try {
+        const result = await this.callAgent(
+          `Review the code at path: ${path} based on the following rubric: ${JSON.stringify(rubric)}. Provide your response in pure JSON format without any additional text or code blocks.`,
+          config.claude,
         );
-        evaluation.add(evaluationItem);
-      }
 
-      return evaluation;
-    } catch (error) {
-      const evaluation = new Evaluation(rubric.name);
-      evaluation.add(new EvaluationItem(0, 0));
-      return evaluation;
+        const parsed = JSON.parse(result);
+        const evaluation = new Evaluation(rubric.name);
+
+        for (const item of parsed.items) {
+          const evaluationItem = new EvaluationItem(
+            item.score || 0,
+            item.maxScore || 0,
+            item.comment,
+          );
+          evaluation.add(evaluationItem);
+        }
+
+        return evaluation;
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+
+        if (attempt < maxRetry) {
+          // Continue to next attempt
+          continue;
+        }
+      }
     }
 
+    // All retries exhausted, return fallback evaluation
     const evaluation = new Evaluation(rubric.name);
-    evaluation.add(new EvaluationItem(1, 1));
+    evaluation.add(new EvaluationItem(0, 0));
     return evaluation;
   }
 

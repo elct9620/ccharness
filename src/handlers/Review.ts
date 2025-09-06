@@ -5,10 +5,14 @@ import { JsonRubricRepository } from "@/repositories/JsonRubricRepository";
 import { ReviewCode } from "@/usecases/ReviewCode";
 import { IReviewService, type ReviewService } from "@/usecases/interface";
 
-export async function reviewAction(path: string) {
+export async function reviewAction(
+  path: string,
+  options: { maxRetry?: string },
+) {
   const rubricRepository = container.resolve(JsonRubricRepository);
   const reviewService = container.resolve<ReviewService>(IReviewService);
   const presenter = container.resolve(ConsoleReviewPresenter);
   const usecase = new ReviewCode(rubricRepository, reviewService, presenter);
-  await usecase.execute({ filePath: path });
+  const maxRetry = options.maxRetry ? parseInt(options.maxRetry, 10) : 3;
+  await usecase.execute({ filePath: path, maxRetry });
 }

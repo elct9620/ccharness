@@ -13,7 +13,7 @@ export interface GitService {
 
 export const IReviewService = Symbol("IReviewService");
 export interface ReviewService {
-  review(path: string, rubric: Rubric): Promise<Evaluation>;
+  review(path: string, rubric: Rubric, maxRetry?: number): Promise<Evaluation>;
 }
 
 export const IWorkingStateBuilder = Symbol("IWorkingStateBuilder");
