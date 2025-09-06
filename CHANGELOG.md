@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.8.0](https://github.com/elct9620/ccharness/compare/v0.7.0...v0.8.0) (2025-09-06)
+
+
+### Features
+
+* display criteria names in review details table ([a444be0](https://github.com/elct9620/ccharness/commit/a444be043cf36d6757be5c4674591d16e7bef30e))
+
+
+### Bug Fixes
+
+* add maxLen constraint to criteria column in review table ([c938b5c](https://github.com/elct9620/ccharness/commit/c938b5cd95b9ab51e5c4d90ff430283585015998))
+* remove fallback criteria from empty evaluations ([e7098b7](https://github.com/elct9620/ccharness/commit/e7098b70806597b8ceaae66a6b0d6dad925e73a5))
+
 ## [0.7.0](https://github.com/elct9620/ccharness/compare/v0.6.0...v0.7.0) (2025-09-06)
 
 
