@@ -1,7 +1,11 @@
 import { readFile } from "fs/promises";
 import { inject, injectable } from "tsyringe";
 
-import { CONFIG_FILE_NAME, type ConfigSchema } from "@/constant";
+import {
+  CONFIG_FILE_NAME,
+  LOCAL_CONFIG_FILE_NAME,
+  type ConfigSchema,
+} from "@/constant";
 import { IProjectRoot } from "@/token";
 
 const defaultConfig: ConfigSchema = {
@@ -25,21 +29,35 @@ export class JsonConfigService {
     return `${this.rootDir}/${CONFIG_FILE_NAME}`;
   }
 
+  get localConfigFilePath(): string {
+    return `${this.rootDir}/${LOCAL_CONFIG_FILE_NAME}`;
+  }
+
   async load(): Promise<ConfigSchema> {
     if (this._cache) {
       return this._cache;
     }
 
+    let result = { ...defaultConfig };
+
     try {
-      const content = await readFile(this.configFilePath, "utf-8");
-      const config: ConfigSchema = JSON.parse(content);
-
-      this._cache = this.deepMerge(defaultConfig, config);
-
-      return this._cache as ConfigSchema;
+      const globalContent = await readFile(this.configFilePath, "utf-8");
+      const globalConfig: ConfigSchema = JSON.parse(globalContent);
+      result = this.deepMerge(result, globalConfig);
     } catch {
-      return defaultConfig;
+      // Global config file missing or invalid, continue with defaults
     }
+
+    try {
+      const localContent = await readFile(this.localConfigFilePath, "utf-8");
+      const localConfig: ConfigSchema = JSON.parse(localContent);
+      result = this.deepMerge(result, localConfig);
+    } catch {
+      // Local config file missing or invalid, continue with current result
+    }
+
+    this._cache = result;
+    return this._cache;
   }
 
   deepMerge(target: any, source: any): any {

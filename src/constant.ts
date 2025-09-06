@@ -1,4 +1,5 @@
 export const CONFIG_FILE_NAME = "ccharness.json";
+export const LOCAL_CONFIG_FILE_NAME = "ccharness.local.json";
 
 export type ConfigSchema = {
   claude?: {
