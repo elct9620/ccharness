@@ -112,12 +112,23 @@ describe("Review", () => {
           name: "testing",
           items: [
             {
+              name: "BDD Naming",
               score: 1,
               total: 1,
               comment: "Test case naming follows BDD format",
             },
-            { score: 1, total: 1, comment: "Uses proper step functions" },
-            { score: 0, total: 1, comment: "Missing proper mocking strategy" },
+            {
+              name: "Step Functions",
+              score: 1,
+              total: 1,
+              comment: "Uses proper step functions",
+            },
+            {
+              name: "Mocking Strategy",
+              score: 0,
+              total: 1,
+              comment: "Missing proper mocking strategy",
+            },
           ],
         },
       ]);
@@ -135,6 +146,10 @@ describe("Review", () => {
       );
       await thenReviewOutputShouldContain("Uses proper step functions");
       await thenReviewOutputShouldContain("Missing proper mocking strategy");
+      // Verify criteria names are displayed
+      await thenReviewOutputShouldContain("BDD Naming");
+      await thenReviewOutputShouldContain("Step Functions");
+      await thenReviewOutputShouldContain("Mocking Strategy");
     });
   });
 

@@ -55,6 +55,12 @@ export class ConsoleReviewPresenter implements ReviewPresenter {
           alignment: "left",
           color: "blue",
         },
+        {
+          name: "criteria",
+          title: "Criteria",
+          alignment: "left",
+          color: "cyan",
+        },
         { name: "score", title: "Score", alignment: "center" },
         { name: "total", title: "Total", alignment: "center" },
         { name: "comment", title: "Comment", alignment: "left", maxLen: 60 },
@@ -65,6 +71,7 @@ export class ConsoleReviewPresenter implements ReviewPresenter {
       for (const item of evaluation.items) {
         detailsTable.addRow({
           evaluation: evaluation.name,
+          criteria: item.name,
           score: item.score,
           total: item.total,
           comment: item.comment || "-",
