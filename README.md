@@ -50,7 +50,7 @@ Options:
 - `-f`, `--max-files <number>`: When exceeding the number of changed files, ask Claude Code to commit. Default is `-1` (disabled).
 - `-l`, `--max-lines <number>`: When exceeding the number of changed lines, ask Claude Code to commit. Default is `-1` (disabled).
 
-### Review Reminder (Experimental)
+### Review Reminder
 
 A `PostToolUse` hook for `Write`, `Edit`, `MultiEdit` tool to remind Claude Code to review with rubric(s).
 
