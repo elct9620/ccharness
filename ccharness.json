@@ -26,6 +26,21 @@
       "name": "Entity",
       "pattern": "entities\/.*\\.(js|ts)$",
       "path": "docs/rubrics/entity.md"
+    },
+    {
+      "name": "Service",
+      "pattern": "services\/.*\\.(js|ts)$",
+      "path": "docs/rubrics/service.md"
+    },
+    {
+      "name": "Handler",
+      "pattern": "handlers\/.*\\.(js|ts)$",
+      "path": "docs/rubrics/handler.md"
+    },
+    {
+      "name": "Presenter",
+      "pattern": "presenters\/.*\\.(js|ts)$",
+      "path": "docs/rubrics/presenter.md"
     }
   ]
 }

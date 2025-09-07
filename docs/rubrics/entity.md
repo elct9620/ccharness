@@ -1,6 +1,6 @@
 # Entity
 
-This document outlines the criteria for evaluating the quality of tests in CCHarness. For the entity, we assert its quality passed over 80% rubric score.
+This document outlines the criteria for evaluating the quality of entities in CCHarness. For the entity, we assert its quality passed over 80% rubric score.
 
 ## Criteria
 

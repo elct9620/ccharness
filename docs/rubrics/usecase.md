@@ -1,6 +1,6 @@
 # Use Case
 
-This document outlines the criteria for evaluating the quality of tests in CCHarness. For the use case, we assert its quality passed over 80% rubric score.
+This document outlines the criteria for evaluating the quality of use cases in CCHarness. For the use case, we assert its quality passed over 80% rubric score.
 
 ## Criteria
 

@@ -1,6 +1,6 @@
 # Domain Model
 
-This document outlines the criteria for evaluating the quality of tests in CCHarness. For the domain model, we assert its quality passed over 80% rubric score.
+This document outlines the criteria for evaluating the quality of domain mdoel in CCHarness. For the domain model, we assert its quality passed over 80% rubric score.
 
 ## Criteria
 
