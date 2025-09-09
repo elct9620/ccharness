@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/elct9620/ccharness/compare/v0.8.0...v0.9.0) (2025-09-09)
+
+
+### Features
+
+* add rubrics for service, handler, and presenter layers ([a04cd8a](https://github.com/elct9620/ccharness/commit/a04cd8adcf3afaa90ac6ca63a2b0667e3e2d6688))
+
 ## [0.8.0](https://github.com/elct9620/ccharness/compare/v0.7.0...v0.8.0) (2025-09-06)
 
 
