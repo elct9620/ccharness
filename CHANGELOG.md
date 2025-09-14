@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.9.0](https://github.com/elct9620/ccharness/compare/v0.8.0...v0.9.0) (2025-09-14)
+
+
+### Features
+
+* add general code quality rubric ([0d15899](https://github.com/elct9620/ccharness/commit/0d15899a63d589c2af2db77dc13da74b48358296))
+* add rubrics for service, handler, and presenter layers ([a04cd8a](https://github.com/elct9620/ccharness/commit/a04cd8adcf3afaa90ac6ca63a2b0667e3e2d6688))
+* implement audit-read PreToolUse hook ([c5f2487](https://github.com/elct9620/ccharness/commit/c5f2487b54f79deb109cdd2e0b4c987ce6fb5a80))
+
+
+### Bug Fixes
+
+* isolate test configuration to prevent real file loading ([4da8784](https://github.com/elct9620/ccharness/commit/4da8784ee95b690a2b38a6791be6e6c499acb398))
+
 ## [0.8.0](https://github.com/elct9620/ccharness/compare/v0.7.0...v0.8.0) (2025-09-06)
 
 
