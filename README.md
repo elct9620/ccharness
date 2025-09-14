@@ -64,6 +64,38 @@ Options:
 
 > Currently, we only add context to remind agent we have rubric document, and use it to review the changes.
 
+### Audit Read
+
+A `PreToolUse` hook for the `Read` tool to restrict Claude Code's access to sensitive files.
+
+```bash
+npx -y @aotoki/ccharness hook audit-read
+```
+
+This hook prevents Claude Code from reading files that match configured sensitive patterns. When a restricted file is accessed, the hook denies permission and explains the reason.
+
+**Hook Configuration:**
+
+Add this hook to your Claude Code settings:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx -y @aotoki/ccharness hook audit-read"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
 ## Review (Experimental)
 
 Review a file against configured rubrics to get evaluation scores and feedback.
@@ -113,6 +145,12 @@ When both files exist, `ccharness.local.json` settings will override `ccharness.
   },
   "review": {
     "blockMode": false
+  },
+  "audit": {
+    "read": [
+      "path/to/sensitive/file.txt",
+      "logs/*.log"
+    ]
   },
   "rubrics": [
     {
