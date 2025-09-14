@@ -9,13 +9,14 @@ CCharness is a lightweight harness for Claude Code, built with TypeScript and de
 ## Tech Stack
 
 - **Language**: TypeScript 5.9+ with ESM modules
-- **Build Tool**: Rolldown (v1.0.0-beta.34, Rust-based bundler)
+- **Build Tool**: Rolldown (v1.0.0-beta.36, Rust-based bundler)
 - **Test Framework**: Vitest
 - **Package Manager**: pnpm (v10.13.1)
 - **CLI Framework**: Commander.js (v14)
 - **Dependency Injection**: tsyringe with @abraham/reflection
 - **Code Formatting**: Prettier (v3.6.2) with organize-imports plugin
 - **Claude Code Integration**: @anthropic-ai/claude-code for API access
+- **Output Formatting**: console-table-printer for structured console output
 
 ## Common Commands
 
@@ -190,10 +191,12 @@ PostToolUse hook presenters output:
 
 - **Strict Mode**: Full strict checking enabled
 - **Additional Checks**: `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`
-- **Module System**: NodeNext with ESM
+- **Module System**: ESNext with bundler resolution
 - **Path Alias**: `@/*` maps to `./src/*`
 - **No Emit**: TypeScript doesn't emit files (handled by Rolldown)
 - **Module Resolution**: Bundler mode for compatibility
+- **Decorators**: `experimentalDecorators` and `emitDecoratorMetadata` enabled for tsyringe
+- **Module Syntax**: `verbatimModuleSyntax` for strict ESM compliance
 
 ### Build Configuration
 
@@ -201,7 +204,15 @@ Rolldown bundles the entire application into a single ESM file:
 - **Input**: `src/main.ts`
 - **Output**: `dist/index.js` with executable shebang
 - **Platform**: Node.js
+- **TypeScript**: Uses `tsconfig.json` for compilation
 - **Binary**: Exposed as `ccharness` command via package.json bin field
+
+### Test Configuration
+
+Vitest is configured with:
+- **Setup File**: `tests/setup.ts` for DI container and mock initialization
+- **Path Alias**: `@` maps to `/src` for test imports
+- **Dependency Injection**: Automatic container cleanup and mock registration in beforeEach
 
 ## Development Workflow
 
