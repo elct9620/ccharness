@@ -41,6 +41,11 @@
       "name": "Presenter",
       "pattern": "presenters\/.*\\.(js|ts)$",
       "path": "docs/rubrics/presenter.md"
+    },
+    {
+      "name": "General Code Quality",
+      "pattern": "src\/.*\\.(js|ts)$",
+      "path": "docs/rubrics/general.md"
     }
   ]
 }
