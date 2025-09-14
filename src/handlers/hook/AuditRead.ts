@@ -28,6 +28,8 @@ export async function auditReadAction() {
   const auditRead = new AuditRead(patternMatcher, decisionPresenter);
   await auditRead.execute({
     hook,
-    config,
+    options: {
+      sensitivePatterns: config.audit?.read || [],
+    },
   });
 }

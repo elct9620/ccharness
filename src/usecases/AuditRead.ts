@@ -1,10 +1,11 @@
-import type { ConfigSchema } from "@/constant";
 import type { PatternMatcher, PreToolUseDecisionPresenter } from "./interface";
 import type { PreToolUseHookInput } from "./port";
 
 export type AuditReadInput = {
   hook: PreToolUseHookInput;
-  config: ConfigSchema;
+  options: {
+    sensitivePatterns: string[];
+  };
 };
 
 export class AuditRead {
@@ -14,7 +15,7 @@ export class AuditRead {
   ) {}
 
   async execute(input: AuditReadInput): Promise<void> {
-    const { hook, config } = input;
+    const { hook, options } = input;
 
     const filePath = hook.toolInput.filePath;
     if (!filePath || typeof filePath !== "string") {
@@ -22,9 +23,7 @@ export class AuditRead {
       return;
     }
 
-    const sensitivePatterns = config.audit?.read || [];
-
-    if (this.patternMatcher.matches(filePath, sensitivePatterns)) {
+    if (this.patternMatcher.matches(filePath, options.sensitivePatterns)) {
       await this.decisionPresenter.deny(
         `The file path '${filePath}' is restricted.`,
       );
