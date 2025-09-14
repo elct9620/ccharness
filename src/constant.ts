@@ -12,6 +12,9 @@ export type ConfigSchema = {
   review: {
     blockMode: boolean;
   };
+  audit?: {
+    read?: string[];
+  };
   rubrics: {
     name: string;
     pattern: string;

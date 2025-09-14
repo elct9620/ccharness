@@ -3,6 +3,7 @@
 import "@abraham/reflection";
 import { Command } from "commander";
 
+import { auditReadAction } from "@/handlers/hook/AuditRead";
 import { guardCommitAction } from "@/handlers/hook/GuardCommit";
 import { reviewAction } from "@/handlers/Review";
 import "./container";
@@ -32,6 +33,11 @@ hook
     "Ensure the agent commit frequently according to the throttle limit",
   )
   .action(guardCommitAction);
+
+hook
+  .command("audit-read")
+  .description("Restrict Claude Code's Read tool access to sensitive files")
+  .action(auditReadAction);
 
 hook
   .command("review-reminder")

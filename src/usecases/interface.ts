@@ -41,9 +41,22 @@ export interface PostToolUseDecisionPresenter {
   block(reason: string, context?: string): Promise<void>;
 }
 
+export const IPreToolUseDecisionPresenter = Symbol(
+  "IPreToolUseDecisionPresenter",
+);
+export interface PreToolUseDecisionPresenter {
+  allow(): Promise<void>;
+  deny(reason: string): Promise<void>;
+}
+
 export const IRubricRepository = Symbol("IRubricRepository");
 export interface RubricRepository {
   matches(path: string): Promise<Rubric[]>;
+}
+
+export const IPatternMatcher = Symbol("IPatternMatcher");
+export interface PatternMatcher {
+  matches(filePath: string, patterns: string[]): boolean;
 }
 
 export const IReviewPresenter = Symbol("IReviewPresenter");

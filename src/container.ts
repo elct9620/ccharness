@@ -1,6 +1,8 @@
 import { container } from "tsyringe";
 
+import { ConsolePreToolUseDecisionPresenter } from "./presenters/ConsolePreToolUseDecisionPresenter";
 import { ClaudeReviewService } from "./services/ClaudeReviewService";
+import { GlobPatternMatcher } from "./services/GlobPatternMatcher";
 import { JsonConfigService } from "./services/JsonConfigService";
 import {
   IConfigService,
@@ -8,7 +10,11 @@ import {
   IHookInputStream,
   IProjectRoot,
 } from "./token";
-import { IReviewService } from "./usecases/interface";
+import {
+  IPatternMatcher,
+  IPreToolUseDecisionPresenter,
+  IReviewService,
+} from "./usecases/interface";
 
 container.register(IProjectRoot, {
   useFactory: () => process.env.CLAUDE_PROJECT_DIR || process.cwd(),
@@ -24,4 +30,10 @@ container.register(IConfigService, {
 });
 container.register(IReviewService, {
   useClass: ClaudeReviewService,
+});
+container.register(IPatternMatcher, {
+  useClass: GlobPatternMatcher,
+});
+container.register(IPreToolUseDecisionPresenter, {
+  useClass: ConsolePreToolUseDecisionPresenter,
 });
