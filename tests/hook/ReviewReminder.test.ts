@@ -19,6 +19,14 @@ describe("Review Reminder", () => {
 
   describe("when the tool is supported without rubrics", () => {
     it("is expected to pass without reason", async () => {
+      await givenConfig({
+        commit: {
+          maxFiles: 5,
+          maxLines: 500,
+        },
+        rubrics: [],
+      });
+
       await givenHookInput({
         toolName: "Write",
         toolResponse: {
