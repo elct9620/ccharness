@@ -14,7 +14,7 @@ const program = new Command();
 program
   .name("ccharness")
   .description("A lightweight harness for Claude Code")
-  .version("0.8.0"); // x-release-please-version
+  .version("0.9.0"); // x-release-please-version
 
 const hook = program.command("hook").description("The hooks for Claude Code");
 hook
