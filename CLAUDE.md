@@ -71,13 +71,16 @@ src/
 ├── handlers/                  # Command handlers (entry points)
 │   ├── hook/                 # Hook-related command handlers
 │   │   ├── GuardCommit.ts    # Stop hook for commit reminders
-│   │   └── ReviewReminder.ts # PostToolUse hook for review reminders
+│   │   ├── ReviewReminder.ts # PostToolUse hook for review reminders
+│   │   ├── CommitReminder.ts # PostToolUse hook for commit reminders
+│   │   └── AuditRead.ts      # Stop hook for restricting Read tool access
 │   └── Review.ts             # Standalone review command handler
 ├── usecases/                  # Core business logic (framework-agnostic)
 │   ├── interface.ts          # Domain interfaces with DI symbols
 │   ├── port.ts               # Data transfer types for external inputs
 │   ├── GuardCommit.ts        # Commit guard logic
 │   ├── RemindToReview.ts     # Review reminder logic
+│   ├── CommitReminder.ts     # Commit reminder logic
 │   └── ReviewCode.ts         # Code review evaluation logic
 ├── entities/                  # Domain entities
 │   ├── WorkingState.ts       # Git working directory state model
@@ -154,7 +157,9 @@ Commands follow a hierarchical pattern using Commander.js:
 ccharness [command] [subcommand] [options]
 ├── hook                       # Hook-related commands
 │   ├── guard-commit          # Stop hook for commit reminders
-│   └── review-reminder       # PostToolUse hook for review context
+│   ├── review-reminder       # PostToolUse hook for review context
+│   ├── commit-reminder       # PostToolUse hook for commit reminders
+│   └── audit-read            # PreToolUse hook for restricting Read tool access
 └── review                     # Standalone review command
 ```
 
@@ -258,12 +263,27 @@ When both files exist, `ccharness.local.json` settings will override `ccharness.
 
 ```json
 {
+  "claude": {
+    "executablePath": "/path/to/claude"  // Optional: Custom Claude Code executable path
+  },
   "commit": {
     "maxFiles": 10,     // Trigger reminder when files changed >= this value
-    "maxLines": 500     // Trigger reminder when lines changed >= this value
+    "maxLines": 500,    // Trigger reminder when lines changed >= this value
+    "reminder": {       // PostToolUse hook commit reminder settings
+      "maxFiles": 10,   // Optional: Override for commit-reminder hook
+      "maxLines": 500,  // Optional: Override for commit-reminder hook
+      "message": "Custom reminder message with {changedFiles} and {changedLines}"
+    }
   },
   "review": {
     "blockMode": false  // Block execution instead of providing additional context
+  },
+  "audit": {
+    "read": [           // File patterns to restrict Read tool access
+      "*.env",
+      "**/.env*",
+      "**/secrets/**"
+    ]
   },
   "rubrics": [          // Review rubric configurations
     {
@@ -291,6 +311,12 @@ Blocks Claude Code and suggests committing when working directory has too many c
 
 ### Review Reminder (PostToolUse Hook)
 Adds context to remind Claude Code to review changes against configured rubrics after Write, Edit, or MultiEdit operations.
+
+### Commit Reminder (PostToolUse Hook)
+Adds context to remind Claude Code to commit when working directory has too many changes after Write, Edit, or MultiEdit operations. Uses customizable message templates with `{changedFiles}` and `{changedLines}` placeholders.
+
+### Audit Read (PreToolUse Hook)
+Restricts Claude Code's Read tool access to sensitive files based on configured file patterns. Checks the file path before the Read tool executes and denies access if it matches sensitive patterns.
 
 ### Review Command (Standalone)
 Evaluates a file against configured rubrics using Claude Code API integration, providing detailed feedback and scores.
