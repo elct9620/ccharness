@@ -39,7 +39,7 @@ export async function commitReminderAction(options: CommitReminderOptions) {
   );
   await commitReminder.execute({
     hook,
-    config,
+    message: config.commit.reminder?.message,
     options: {
       maxFiles: parseInt(options.maxFiles, 10),
       maxLines: parseInt(options.maxLines, 10),

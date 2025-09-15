@@ -1,4 +1,3 @@
-import type { ConfigSchema } from "@/constant";
 import type {
   GitService,
   PostToolUseDecisionPresenter,
@@ -8,7 +7,7 @@ import type { PostToolUseHookInput } from "./port";
 
 export type CommitReminderInput = {
   hook: PostToolUseHookInput;
-  config: ConfigSchema;
+  message?: string;
   options: {
     maxFiles: number;
     maxLines: number;
@@ -50,7 +49,7 @@ export class CommitReminder {
     }
 
     const message = this.buildReminderMessage(
-      input.config,
+      input.message,
       workingState.changedFiles,
       workingState.changedLines,
     );
@@ -58,12 +57,11 @@ export class CommitReminder {
   }
 
   private buildReminderMessage(
-    config: ConfigSchema,
+    message: string | undefined,
     changedFiles: number,
     changedLines: number,
   ): string {
-    const template =
-      config.commit.reminder?.message ?? CommitReminder.DEFAULT_MESSAGE;
+    const template = message ?? CommitReminder.DEFAULT_MESSAGE;
 
     return template
       .replace("{changedFiles}", changedFiles.toString())

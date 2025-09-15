@@ -53,7 +53,7 @@ Never use parameters directly in the `execute` method. Instead, define input mod
 import { Evaluation } from "@/entities/Evaluation";
 
 export type ReviewCodeInput = {
-    code: string;
+    code: string; // Plain data structure without dependencies on other layers
 };
 
 export class ReviewCode {
@@ -67,7 +67,7 @@ export class ReviewCode {
 - Define input types (e.g., `ReviewCodeInput`) to encapsulate all parameters.
 - Use presenter interface to output if necessary.
 - The input model only used by the use case and defined in the same file.
-- The input model should be plain data structures without dependencies on other layers.
+- The input model should be plain data structures without dependencies on other layers, e.g. `src/constants` is not allowed.
 
 ## Scoring
 
