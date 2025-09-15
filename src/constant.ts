@@ -8,6 +8,11 @@ export type ConfigSchema = {
   commit: {
     maxFiles: number;
     maxLines: number;
+    reminder?: {
+      maxFiles?: number;
+      maxLines?: number;
+      message?: string;
+    };
   };
   review: {
     blockMode: boolean;

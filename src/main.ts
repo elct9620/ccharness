@@ -4,6 +4,7 @@ import "@abraham/reflection";
 import { Command } from "commander";
 
 import { auditReadAction } from "@/handlers/hook/AuditRead";
+import { commitReminderAction } from "@/handlers/hook/CommitReminder";
 import { guardCommitAction } from "@/handlers/hook/GuardCommit";
 import { reviewAction } from "@/handlers/Review";
 import "./container";
@@ -47,6 +48,23 @@ hook
   )
   .description("Add additional context to reminders to review code after edits")
   .action(reviewReminderAction);
+
+hook
+  .command("commit-reminder")
+  .option(
+    "-f, --max-files <number>",
+    "The maximum number of files to trigger a commit reminder, use -1 to disable",
+    "-1",
+  )
+  .option(
+    "-l, --max-lines <number>",
+    "The maximum number of lines changed to trigger a commit reminder, use -1 to disable",
+    "-1",
+  )
+  .description(
+    "Add reminder to commit when too many changes are made after edits",
+  )
+  .action(commitReminderAction);
 
 program
   .command("review")
