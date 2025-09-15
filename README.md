@@ -64,6 +64,43 @@ Options:
 
 > Currently, we only add context to remind agent we have rubric document, and use it to review the changes.
 
+### Commit Reminder
+
+A `PostToolUse` hook for `Write`, `Edit`, `MultiEdit` tools to remind Claude Code to commit when too many changes are made.
+
+```bash
+npx -y @aotoki/ccharness hook commit-reminder
+```
+
+Options:
+
+- `-f`, `--max-files <number>`: The maximum number of files to trigger a commit reminder, use -1 to disable. Default is `-1` (disabled).
+- `-l`, `--max-lines <number>`: The maximum number of lines changed to trigger a commit reminder, use -1 to disable. Default is `-1` (disabled).
+
+**Hook Configuration:**
+
+Add this hook to your Claude Code settings:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx -y @aotoki/ccharness hook commit-reminder"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+This hook monitors file changes after write operations and provides reminders to commit when the number of changed files or lines exceeds configured thresholds, helping maintain good commit hygiene.
+
 ### Audit Read
 
 A `PreToolUse` hook for the `Read` tool to restrict Claude Code's access to sensitive files.
@@ -141,7 +178,12 @@ When both files exist, `ccharness.local.json` settings will override `ccharness.
 {
   "commit": {
     "maxFiles": 10,
-    "maxLines": 500
+    "maxLines": 500,
+    "reminder": {
+      "maxFiles": 5,
+      "maxLines": 50,
+      "message": "You have changed {changedFiles} files and {changedLines} lines without committing. Consider making a commit to save your progress."
+    }
   },
   "review": {
     "blockMode": false
