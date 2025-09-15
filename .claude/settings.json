@@ -25,7 +25,7 @@
           },
           {
             "type": "command",
-            "command": "pnpm test"
+            "command": "jq -r '.stop_hook_active' | { read stopped; if [[ \"$stopped\" != \"true\" ]]; then pnpm test; fi; }"
           }
         ]
       }
