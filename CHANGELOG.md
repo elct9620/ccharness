@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/elct9620/ccharness/compare/v0.9.0...v0.10.0) (2025-09-15)
+
+
+### Features
+
+* implement commit reminder PostToolUse hook ([cf28e94](https://github.com/elct9620/ccharness/commit/cf28e949dc378c01ae52054a49589aeeeae28ae6))
+
 ## [0.9.0](https://github.com/elct9620/ccharness/compare/v0.8.0...v0.9.0) (2025-09-14)
 
 
