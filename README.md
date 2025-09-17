@@ -1,5 +1,7 @@
 # Claude Code Harness
 
+[![codecov](https://codecov.io/gh/elct9620/ccharness/graph/badge.svg?token=C0FMNBUTA9)](https://codecov.io/gh/elct9620/ccharness)
+
 A set of lightweight tools for Claude Code users to improve their experience.
 
 > [!WARNING]
