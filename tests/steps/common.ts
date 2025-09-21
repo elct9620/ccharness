@@ -15,3 +15,7 @@ export async function givenConfig(config: ConfigSchema) {
 
   return mockedConfigService.load;
 }
+
+export function givenEnvironmentVariable(name: string, value: string) {
+  vi.stubEnv(name, value);
+}

@@ -17,6 +17,13 @@ type ReviewReminderOptions = {
 export async function reviewReminderAction(
   options: ReviewReminderOptions = {},
 ) {
+  if (
+    process.env.CCHARNESS_HOOK_DISABLED === "true" ||
+    process.env.CCHARNESS_HOOK_DISABLED === "1"
+  ) {
+    return;
+  }
+
   const readHookInputService = container.resolve(ReadHookInputService);
   const configService = container.resolve<JsonConfigService>(IConfigService);
   const rubricRepository = container.resolve(JsonRubricRepository);

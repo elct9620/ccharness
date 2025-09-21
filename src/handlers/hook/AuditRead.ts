@@ -15,12 +15,21 @@ import {
 import type { PreToolUseHookInput } from "@/usecases/port";
 
 export async function auditReadAction() {
-  const readHookInputService = container.resolve(ReadHookInputService);
-  const configService = container.resolve<JsonConfigService>(IConfigService);
-  const patternMatcher = container.resolve<PatternMatcher>(IPatternMatcher);
   const decisionPresenter = container.resolve<PreToolUseDecisionPresenter>(
     IPreToolUseDecisionPresenter,
   );
+
+  if (
+    process.env.CCHARNESS_HOOK_DISABLED === "true" ||
+    process.env.CCHARNESS_HOOK_DISABLED === "1"
+  ) {
+    await decisionPresenter.allow();
+    return;
+  }
+
+  const readHookInputService = container.resolve(ReadHookInputService);
+  const configService = container.resolve<JsonConfigService>(IConfigService);
+  const patternMatcher = container.resolve<PatternMatcher>(IPatternMatcher);
 
   const hook = await readHookInputService.parse<PreToolUseHookInput>();
   const config = await configService.load();

@@ -12,10 +12,19 @@ type GuardCommitOptions = {
 };
 
 export async function guardCommitAction(options: GuardCommitOptions) {
+  const decisionPresenter = container.resolve(ConsoleStopDecisionPresenter);
+
+  if (
+    process.env.CCHARNESS_HOOK_DISABLED === "true" ||
+    process.env.CCHARNESS_HOOK_DISABLED === "1"
+  ) {
+    await decisionPresenter.pass("");
+    return;
+  }
+
   const readHookInputService = container.resolve(ReadHookInputService);
   const gitService = container.resolve(CmdGitService);
   const configBuilder = container.resolve(JsonWorkingStateBuilder);
-  const decisionPresenter = container.resolve(ConsoleStopDecisionPresenter);
 
   const hook = await readHookInputService.parse<StopHookInput>();
 

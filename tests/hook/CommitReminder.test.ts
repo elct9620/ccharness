@@ -1,8 +1,8 @@
-import { describe, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { commitReminderAction } from "@/handlers/hook/CommitReminder";
 import type { GitService } from "@/usecases/interface";
-import { givenConfig } from "tests/steps/common";
+import { givenConfig, givenEnvironmentVariable } from "tests/steps/common";
 import { givenGitService } from "tests/steps/git";
 import {
   givenHookInput,
@@ -11,6 +11,75 @@ import {
 } from "tests/steps/hook";
 
 describe("Commit Reminder", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  describe("when CCHARNESS_HOOK_DISABLED is set to '1'", () => {
+    it("is expected to pass immediately without checks", async () => {
+      givenEnvironmentVariable("CCHARNESS_HOOK_DISABLED", "1");
+
+      const gitService: Partial<GitService> = {
+        isAvailable: vi.fn(),
+        countChangedFiles: vi.fn(),
+        countChangedLines: vi.fn(),
+        countUntrackedLines: vi.fn(),
+      };
+      await givenGitService(gitService);
+
+      await givenHookInput({
+        toolName: "Write",
+        toolResponse: {
+          filePath: "src/index.ts",
+        },
+      });
+
+      await commitReminderAction({
+        maxFiles: "5",
+        maxLines: "50",
+      });
+
+      await thenHookOutputShouldBeEmpty();
+
+      expect(gitService.isAvailable).not.toHaveBeenCalled();
+      expect(gitService.countChangedFiles).not.toHaveBeenCalled();
+      expect(gitService.countChangedLines).not.toHaveBeenCalled();
+      expect(gitService.countUntrackedLines).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when CCHARNESS_HOOK_DISABLED is set to 'true'", () => {
+    it("is expected to pass immediately without checks", async () => {
+      givenEnvironmentVariable("CCHARNESS_HOOK_DISABLED", "true");
+
+      const gitService: Partial<GitService> = {
+        isAvailable: vi.fn(),
+        countChangedFiles: vi.fn(),
+        countChangedLines: vi.fn(),
+        countUntrackedLines: vi.fn(),
+      };
+      await givenGitService(gitService);
+
+      await givenHookInput({
+        toolName: "MultiEdit",
+        toolResponse: {
+          filePath: "src/index.ts",
+        },
+      });
+
+      await commitReminderAction({
+        maxFiles: "5",
+        maxLines: "50",
+      });
+
+      await thenHookOutputShouldBeEmpty();
+
+      expect(gitService.isAvailable).not.toHaveBeenCalled();
+      expect(gitService.countChangedFiles).not.toHaveBeenCalled();
+      expect(gitService.countChangedLines).not.toHaveBeenCalled();
+      expect(gitService.countUntrackedLines).not.toHaveBeenCalled();
+    });
+  });
   describe("when the tool is not supported", () => {
     it("is expected to pass without output", async () => {
       await givenHookInput({

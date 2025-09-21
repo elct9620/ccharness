@@ -1,7 +1,7 @@
-import { describe, it } from "vitest";
+import { afterEach, describe, it, vi } from "vitest";
 
 import { reviewReminderAction } from "@/handlers/hook/ReviewReminder";
-import { givenConfig } from "tests/steps/common";
+import { givenConfig, givenEnvironmentVariable } from "tests/steps/common";
 import {
   givenHookInput,
   thenHookOutputShouldBe,
@@ -9,6 +9,69 @@ import {
 } from "tests/steps/hook";
 
 describe("Review Reminder", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  describe("when CCHARNESS_HOOK_DISABLED is set to '1'", () => {
+    it("is expected to pass immediately without checks", async () => {
+      givenEnvironmentVariable("CCHARNESS_HOOK_DISABLED", "1");
+
+      await givenConfig({
+        commit: {
+          maxFiles: 5,
+          maxLines: 500,
+        },
+        rubrics: [
+          {
+            name: "typescript",
+            pattern: "\\.ts$",
+            path: "docs/rubrics/typescript.md",
+          },
+        ],
+      });
+
+      await givenHookInput({
+        toolName: "Write",
+        toolResponse: {
+          filePath: "src/index.ts",
+        },
+      });
+
+      await reviewReminderAction();
+      await thenHookOutputShouldBeEmpty();
+    });
+  });
+
+  describe("when CCHARNESS_HOOK_DISABLED is set to 'true'", () => {
+    it("is expected to pass immediately without checks", async () => {
+      givenEnvironmentVariable("CCHARNESS_HOOK_DISABLED", "true");
+
+      await givenConfig({
+        commit: {
+          maxFiles: 5,
+          maxLines: 500,
+        },
+        rubrics: [
+          {
+            name: "typescript",
+            pattern: "\\.ts$",
+            path: "docs/rubrics/typescript.md",
+          },
+        ],
+      });
+
+      await givenHookInput({
+        toolName: "Edit",
+        toolResponse: {
+          filePath: "src/index.ts",
+        },
+      });
+
+      await reviewReminderAction();
+      await thenHookOutputShouldBeEmpty();
+    });
+  });
   describe("when the tool is not supported", () => {
     it("is expected to pass without output", async () => {
       await givenHookInput({});

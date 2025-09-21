@@ -1,10 +1,93 @@
-import { describe, it } from "vitest";
+import { afterEach, describe, it, vi } from "vitest";
 
 import { auditReadAction } from "@/handlers/hook/AuditRead";
-import { givenConfig } from "tests/steps/common";
+import { givenConfig, givenEnvironmentVariable } from "tests/steps/common";
 import { givenHookInput, thenHookOutputShouldBe } from "tests/steps/hook";
 
 describe("Audit Read", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  describe("when CCHARNESS_HOOK_DISABLED is set to '1'", () => {
+    it("is expected to allow immediately without checks", async () => {
+      givenEnvironmentVariable("CCHARNESS_HOOK_DISABLED", "1");
+
+      await givenConfig({
+        commit: {
+          maxFiles: -1,
+          maxLines: -1,
+        },
+        review: {
+          blockMode: false,
+        },
+        audit: {
+          read: ["*.env", "**/.env*", "**/secrets/**"],
+        },
+        rubrics: [],
+      });
+
+      await givenHookInput({
+        sessionId: "test-session",
+        transcriptPath: "/tmp/transcript.json",
+        cwd: "/project",
+        hookEventName: "PreToolUse",
+        toolName: "Read",
+        toolInput: {
+          file_path: ".env",
+        },
+      });
+
+      await auditReadAction();
+
+      await thenHookOutputShouldBe({
+        hookSpecificOutput: {
+          hookEventName: "PreToolUse",
+          permissionDecision: "allow",
+        },
+      });
+    });
+  });
+
+  describe("when CCHARNESS_HOOK_DISABLED is set to 'true'", () => {
+    it("is expected to allow immediately without checks", async () => {
+      givenEnvironmentVariable("CCHARNESS_HOOK_DISABLED", "true");
+
+      await givenConfig({
+        commit: {
+          maxFiles: -1,
+          maxLines: -1,
+        },
+        review: {
+          blockMode: false,
+        },
+        audit: {
+          read: ["*.env", "**/.env*", "**/secrets/**"],
+        },
+        rubrics: [],
+      });
+
+      await givenHookInput({
+        sessionId: "test-session",
+        transcriptPath: "/tmp/transcript.json",
+        cwd: "/project",
+        hookEventName: "PreToolUse",
+        toolName: "Read",
+        toolInput: {
+          file_path: "secrets/api-keys.txt",
+        },
+      });
+
+      await auditReadAction();
+
+      await thenHookOutputShouldBe({
+        hookSpecificOutput: {
+          hookEventName: "PreToolUse",
+          permissionDecision: "allow",
+        },
+      });
+    });
+  });
   describe("when file is not sensitive", () => {
     it("is expected to allow access", async () => {
       await givenConfig({

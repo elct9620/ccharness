@@ -1,12 +1,87 @@
-import { describe, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { guardCommitAction } from "@/handlers/hook/GuardCommit";
 import type { GitService } from "@/usecases/interface";
-import { givenConfig } from "tests/steps/common";
+import { givenConfig, givenEnvironmentVariable } from "tests/steps/common";
 import { givenGitService } from "tests/steps/git";
 import { givenHookInput, thenHookOutputShouldBe } from "tests/steps/hook";
 
 describe("Guard Commit", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  describe("when CCHARNESS_HOOK_DISABLED is set to '1'", () => {
+    it("is expected to pass immediately without checks", async () => {
+      givenEnvironmentVariable("CCHARNESS_HOOK_DISABLED", "1");
+
+      const gitService: Partial<GitService> = {
+        isAvailable: vi.fn(),
+        countChangedFiles: vi.fn(),
+        countChangedLines: vi.fn(),
+        countUntrackedLines: vi.fn(),
+      };
+      await givenGitService(gitService);
+
+      await givenHookInput({
+        sessionId: "test-session",
+        transcriptPath: "/tmp/transcript.json",
+        cwd: "/project",
+        hookEventName: "stop",
+        stopHookActive: false,
+      });
+
+      await guardCommitAction({
+        maxFiles: "10",
+        maxLines: "500",
+      });
+
+      await thenHookOutputShouldBe({
+        reason: "",
+      });
+
+      expect(gitService.isAvailable).not.toHaveBeenCalled();
+      expect(gitService.countChangedFiles).not.toHaveBeenCalled();
+      expect(gitService.countChangedLines).not.toHaveBeenCalled();
+      expect(gitService.countUntrackedLines).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("when CCHARNESS_HOOK_DISABLED is set to 'true'", () => {
+    it("is expected to pass immediately without checks", async () => {
+      givenEnvironmentVariable("CCHARNESS_HOOK_DISABLED", "true");
+
+      const gitService: Partial<GitService> = {
+        isAvailable: vi.fn(),
+        countChangedFiles: vi.fn(),
+        countChangedLines: vi.fn(),
+        countUntrackedLines: vi.fn(),
+      };
+      await givenGitService(gitService);
+
+      await givenHookInput({
+        sessionId: "test-session",
+        transcriptPath: "/tmp/transcript.json",
+        cwd: "/project",
+        hookEventName: "stop",
+        stopHookActive: false,
+      });
+
+      await guardCommitAction({
+        maxFiles: "10",
+        maxLines: "500",
+      });
+
+      await thenHookOutputShouldBe({
+        reason: "",
+      });
+
+      expect(gitService.isAvailable).not.toHaveBeenCalled();
+      expect(gitService.countChangedFiles).not.toHaveBeenCalled();
+      expect(gitService.countChangedLines).not.toHaveBeenCalled();
+      expect(gitService.countUntrackedLines).not.toHaveBeenCalled();
+    });
+  });
   describe("when stop hook is already active", () => {
     it("is expected to pass without blocking", async () => {
       await givenHookInput({

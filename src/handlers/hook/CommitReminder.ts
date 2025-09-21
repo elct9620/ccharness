@@ -17,6 +17,13 @@ type CommitReminderOptions = {
 };
 
 export async function commitReminderAction(options: CommitReminderOptions) {
+  if (
+    process.env.CCHARNESS_HOOK_DISABLED === "true" ||
+    process.env.CCHARNESS_HOOK_DISABLED === "1"
+  ) {
+    return;
+  }
+
   const readHookInputService = container.resolve(ReadHookInputService);
   const gitService = container.resolve(CmdGitService);
   const stateBuilder = container.resolve(JsonWorkingStateBuilder);
