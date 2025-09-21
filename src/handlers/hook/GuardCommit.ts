@@ -1,5 +1,6 @@
 import { ConsoleStopDecisionPresenter } from "@/presenters/ConsoleStopDecisionPresenter";
 import { CmdGitService } from "@/services/CmdGitService";
+import { EnvFeatureService } from "@/services/EnvFeatureService";
 import { JsonWorkingStateBuilder } from "@/services/JsonWorkingStateBuilder";
 import { ReadHookInputService } from "@/services/ReadHookInputService";
 import { GuardCommit } from "@/usecases/GuardCommit";
@@ -12,23 +13,16 @@ type GuardCommitOptions = {
 };
 
 export async function guardCommitAction(options: GuardCommitOptions) {
-  const decisionPresenter = container.resolve(ConsoleStopDecisionPresenter);
-
-  if (
-    process.env.CCHARNESS_HOOK_DISABLED === "true" ||
-    process.env.CCHARNESS_HOOK_DISABLED === "1"
-  ) {
-    await decisionPresenter.pass("");
-    return;
-  }
-
   const readHookInputService = container.resolve(ReadHookInputService);
+  const featureService = container.resolve(EnvFeatureService);
   const gitService = container.resolve(CmdGitService);
   const configBuilder = container.resolve(JsonWorkingStateBuilder);
+  const decisionPresenter = container.resolve(ConsoleStopDecisionPresenter);
 
   const hook = await readHookInputService.parse<StopHookInput>();
 
   const guardCommit = new GuardCommit(
+    featureService,
     gitService,
     configBuilder,
     decisionPresenter,

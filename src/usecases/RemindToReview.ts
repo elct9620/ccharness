@@ -1,4 +1,5 @@
 import type {
+  FeatureService,
   PostToolUseDecisionPresenter,
   RubricRepository,
 } from "./interface";
@@ -10,14 +11,19 @@ export type RemindToReviewInput = {
 
 export class RemindToReview {
   constructor(
+    private readonly featureService: FeatureService,
     private readonly rubrics: RubricRepository,
     private readonly presenter: PostToolUseDecisionPresenter,
   ) {}
 
   async execute(input: RemindToReviewInput): Promise<void> {
+    if (this.featureService.isDisabled("HOOK")) {
+      return;
+    }
+
     const matchedRubrics = await this.rubrics.matches(input.filePath);
     if (matchedRubrics.length === 0) {
-      this.presenter.pass();
+      await this.presenter.pass();
       return;
     }
 
@@ -28,9 +34,9 @@ export class RemindToReview {
     const reviewMessage = `Ensure review changes against ${rubricPathReferences}, fix rubrics violations and keep the code clean before proceeding.`;
 
     if (input.blockMode) {
-      this.presenter.block(reviewMessage);
+      await this.presenter.block(reviewMessage);
     } else {
-      this.presenter.pass(reviewMessage);
+      await this.presenter.pass(reviewMessage);
     }
   }
 }

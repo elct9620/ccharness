@@ -1,4 +1,5 @@
 import type {
+  FeatureService,
   GitService,
   StopDecisionPresenter,
   WorkingStateBuilder,
@@ -15,12 +16,18 @@ export type GuardCommitInput = {
 
 export class GuardCommit {
   constructor(
+    private readonly featureService: FeatureService,
     private readonly gitService: GitService,
     private readonly stateBuilder: WorkingStateBuilder,
     private readonly decisionPresenter: StopDecisionPresenter,
   ) {}
 
   async execute(input: GuardCommitInput): Promise<void> {
+    if (this.featureService.isDisabled("HOOK")) {
+      await this.decisionPresenter.pass();
+      return;
+    }
+
     if (input.hook.stopHookActive) {
       await this.decisionPresenter.pass();
       return;

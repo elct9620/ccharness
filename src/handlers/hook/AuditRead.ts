@@ -1,5 +1,6 @@
 import { container } from "tsyringe";
 
+import { EnvFeatureService } from "@/services/EnvFeatureService";
 import { JsonConfigService } from "@/services/JsonConfigService";
 import { ReadHookInputService } from "@/services/ReadHookInputService";
 import { IConfigService } from "@/token";
@@ -15,26 +16,22 @@ import {
 import type { PreToolUseHookInput } from "@/usecases/port";
 
 export async function auditReadAction() {
+  const readHookInputService = container.resolve(ReadHookInputService);
+  const featureService = container.resolve(EnvFeatureService);
+  const configService = container.resolve<JsonConfigService>(IConfigService);
+  const patternMatcher = container.resolve<PatternMatcher>(IPatternMatcher);
   const decisionPresenter = container.resolve<PreToolUseDecisionPresenter>(
     IPreToolUseDecisionPresenter,
   );
 
-  if (
-    process.env.CCHARNESS_HOOK_DISABLED === "true" ||
-    process.env.CCHARNESS_HOOK_DISABLED === "1"
-  ) {
-    await decisionPresenter.allow();
-    return;
-  }
-
-  const readHookInputService = container.resolve(ReadHookInputService);
-  const configService = container.resolve<JsonConfigService>(IConfigService);
-  const patternMatcher = container.resolve<PatternMatcher>(IPatternMatcher);
-
   const hook = await readHookInputService.parse<PreToolUseHookInput>();
   const config = await configService.load();
 
-  const auditRead = new AuditRead(patternMatcher, decisionPresenter);
+  const auditRead = new AuditRead(
+    featureService,
+    patternMatcher,
+    decisionPresenter,
+  );
   await auditRead.execute({
     hook,
     options: {

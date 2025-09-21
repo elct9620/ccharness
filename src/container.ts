@@ -2,6 +2,7 @@ import { container } from "tsyringe";
 
 import { ConsolePreToolUseDecisionPresenter } from "./presenters/ConsolePreToolUseDecisionPresenter";
 import { ClaudeReviewService } from "./services/ClaudeReviewService";
+import { EnvFeatureService } from "./services/EnvFeatureService";
 import { GlobPatternMatcher } from "./services/GlobPatternMatcher";
 import { JsonConfigService } from "./services/JsonConfigService";
 import {
@@ -11,6 +12,7 @@ import {
   IProjectRoot,
 } from "./token";
 import {
+  IFeatureService,
   IPatternMatcher,
   IPreToolUseDecisionPresenter,
   IReviewService,
@@ -36,4 +38,7 @@ container.register(IPatternMatcher, {
 });
 container.register(IPreToolUseDecisionPresenter, {
   useClass: ConsolePreToolUseDecisionPresenter,
+});
+container.register(IFeatureService, {
+  useClass: EnvFeatureService,
 });

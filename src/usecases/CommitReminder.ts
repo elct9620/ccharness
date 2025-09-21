@@ -1,4 +1,5 @@
 import type {
+  FeatureService,
   GitService,
   PostToolUseDecisionPresenter,
   WorkingStateBuilder,
@@ -19,12 +20,17 @@ export class CommitReminder {
     "You have changed {changedFiles} files and {changedLines} lines without committing. Consider making a commit to save your progress.";
 
   constructor(
+    private readonly featureService: FeatureService,
     private readonly gitService: GitService,
     private readonly stateBuilder: WorkingStateBuilder,
     private readonly presenter: PostToolUseDecisionPresenter,
   ) {}
 
   async execute(input: CommitReminderInput): Promise<void> {
+    if (this.featureService.isDisabled("HOOK")) {
+      return;
+    }
+
     const isGitAvailable = await this.gitService.isAvailable();
     if (!isGitAvailable) {
       return;

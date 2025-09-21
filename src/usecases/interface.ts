@@ -64,3 +64,8 @@ export interface ReviewPresenter {
   progress(status: string): Promise<void>;
   display(report: ReviewReport): Promise<void>;
 }
+
+export const IFeatureService = Symbol("IFeatureService");
+export interface FeatureService {
+  isDisabled(name: string): boolean;
+}

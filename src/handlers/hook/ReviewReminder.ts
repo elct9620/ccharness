@@ -2,6 +2,7 @@ import { container } from "tsyringe";
 
 import { ConsolePostToolUseDecisionPresenter } from "@/presenters/ConsolePostToolUseDecisionPresenter";
 import { JsonRubricRepository } from "@/repositories/JsonRubricRepository";
+import { EnvFeatureService } from "@/services/EnvFeatureService";
 import { JsonConfigService } from "@/services/JsonConfigService";
 import { ReadHookInputService } from "@/services/ReadHookInputService";
 import { IConfigService } from "@/token";
@@ -17,14 +18,8 @@ type ReviewReminderOptions = {
 export async function reviewReminderAction(
   options: ReviewReminderOptions = {},
 ) {
-  if (
-    process.env.CCHARNESS_HOOK_DISABLED === "true" ||
-    process.env.CCHARNESS_HOOK_DISABLED === "1"
-  ) {
-    return;
-  }
-
   const readHookInputService = container.resolve(ReadHookInputService);
+  const featureService = container.resolve(EnvFeatureService);
   const configService = container.resolve<JsonConfigService>(IConfigService);
   const rubricRepository = container.resolve(JsonRubricRepository);
   const presenter = container.resolve(ConsolePostToolUseDecisionPresenter);
@@ -46,7 +41,11 @@ export async function reviewReminderAction(
     blockMode = config.review?.blockMode || false;
   }
 
-  const remindeToReview = new RemindToReview(rubricRepository, presenter);
+  const remindeToReview = new RemindToReview(
+    featureService,
+    rubricRepository,
+    presenter,
+  );
   await remindeToReview.execute({
     filePath: hook.toolResponse.filePath,
     blockMode,

@@ -2,6 +2,7 @@ import { container } from "tsyringe";
 
 import { ConsolePostToolUseDecisionPresenter } from "@/presenters/ConsolePostToolUseDecisionPresenter";
 import { CmdGitService } from "@/services/CmdGitService";
+import { EnvFeatureService } from "@/services/EnvFeatureService";
 import { JsonConfigService } from "@/services/JsonConfigService";
 import { JsonWorkingStateBuilder } from "@/services/JsonWorkingStateBuilder";
 import { ReadHookInputService } from "@/services/ReadHookInputService";
@@ -17,14 +18,8 @@ type CommitReminderOptions = {
 };
 
 export async function commitReminderAction(options: CommitReminderOptions) {
-  if (
-    process.env.CCHARNESS_HOOK_DISABLED === "true" ||
-    process.env.CCHARNESS_HOOK_DISABLED === "1"
-  ) {
-    return;
-  }
-
   const readHookInputService = container.resolve(ReadHookInputService);
+  const featureService = container.resolve(EnvFeatureService);
   const gitService = container.resolve(CmdGitService);
   const stateBuilder = container.resolve(JsonWorkingStateBuilder);
   const configService = container.resolve<JsonConfigService>(IConfigService);
@@ -40,6 +35,7 @@ export async function commitReminderAction(options: CommitReminderOptions) {
   const config = await configService.load();
 
   const commitReminder = new CommitReminder(
+    featureService,
     gitService,
     stateBuilder,
     presenter,
