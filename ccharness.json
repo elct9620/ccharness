@@ -9,8 +9,13 @@
   "rubrics": [
     {
       "name": "Testing Quality",
-      "pattern": "tests\/.*\\.(js|ts)$",
+      "pattern": "\\.test\\.(js|ts)$",
       "path": "docs/rubrics/testing.md"
+    },
+    {
+      "name": "Testing Steps",
+      "pattern": "tests\/steps\/.*\\.(js|ts)$",
+      "path": "docs/rubrics/steps.md"
     },
     {
       "name": "Domain Model",
