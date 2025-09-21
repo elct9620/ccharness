@@ -1,47 +1,46 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, it, vi } from "vitest";
 
-import { EnvFeatureService } from "@/services/EnvFeatureService";
-import { givenEnvironmentVariable } from "tests/steps/common";
+import {
+  givenEnvironmentVariable,
+  thenFeatureShouldBeDisabled,
+  thenFeatureShouldBeEnabled,
+} from "tests/steps/common";
 
 describe("EnvFeatureService", () => {
   afterEach(() => {
     vi.unstubAllEnvs();
   });
 
-  describe("when specific feature flag is set to '1'", () => {
-    it("is expected to return true for that specific feature", () => {
+  describe("when environment variable is set to '1'", () => {
+    it("is expected to return true for the corresponding feature", () => {
       givenEnvironmentVariable("CCHARNESS_FEATURE_DISABLED", "1");
 
-      const service = new EnvFeatureService();
-      expect(service.isDisabled("FEATURE")).toBe(true);
-      expect(service.isDisabled("HOOK")).toBe(false);
+      thenFeatureShouldBeDisabled("FEATURE");
+      thenFeatureShouldBeEnabled("HOOK");
     });
   });
 
-  describe("when specific feature flag is set to 'true'", () => {
-    it("is expected to return true for that specific feature", () => {
+  describe("when environment variable is set to 'true'", () => {
+    it("is expected to return true for the corresponding feature", () => {
       givenEnvironmentVariable("CCHARNESS_FEATURE_DISABLED", "true");
 
-      const service = new EnvFeatureService();
-      expect(service.isDisabled("FEATURE")).toBe(true);
-      expect(service.isDisabled("HOOK")).toBe(false);
+      thenFeatureShouldBeDisabled("FEATURE");
+      thenFeatureShouldBeEnabled("HOOK");
     });
   });
 
-  describe("when no flags are set", () => {
+  describe("when no environment variables are set", () => {
     it("is expected to return false for all features", () => {
-      const service = new EnvFeatureService();
-      expect(service.isDisabled("HOOK")).toBe(false);
-      expect(service.isDisabled("FEATURE")).toBe(false);
+      thenFeatureShouldBeEnabled("HOOK");
+      thenFeatureShouldBeEnabled("FEATURE");
     });
   });
 
-  describe("when feature name has lowercase", () => {
-    it("is expected to convert to uppercase for env var check", () => {
+  describe("when feature name contains lowercase letters", () => {
+    it("is expected to convert to uppercase for environment variable lookup", () => {
       givenEnvironmentVariable("CCHARNESS_HOOK_DISABLED", "1");
 
-      const service = new EnvFeatureService();
-      expect(service.isDisabled("hook")).toBe(true);
+      thenFeatureShouldBeDisabled("hook");
     });
   });
 });
