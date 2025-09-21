@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://github.com/elct9620/ccharness/compare/v0.10.1...v0.11.0) (2025-09-21)
+
+
+### Features
+
+* add CCHARNESS_HOOK_DISABLED environment variable support ([260f878](https://github.com/elct9620/ccharness/commit/260f8780377e1d11200e54530f85d38e442a99fd))
+
 ## [0.10.1](https://github.com/elct9620/ccharness/compare/v0.10.0...v0.10.1) (2025-09-19)
 
 
