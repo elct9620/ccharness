@@ -8,6 +8,17 @@ import { IConfigService } from "@/token";
 import type { ReviewService } from "@/usecases/interface";
 import type { ConfigService } from "./interface";
 
+type ParseResult = {
+  items: CrieriaData[];
+};
+
+type CrieriaData = {
+  name: string;
+  comment: string;
+  maxScore: number;
+  score: number;
+};
+
 @injectable()
 export class ClaudeReviewService implements ReviewService {
   constructor(@inject(IConfigService) private configService: ConfigService) {}
@@ -28,7 +39,20 @@ export class ClaudeReviewService implements ReviewService {
           config.claude,
         );
 
-        const parsed = JSON.parse(result);
+        const insideCodeBlock = result.includes("```json");
+
+        let parsed: ParseResult = { items: [] };
+        if (insideCodeBlock) {
+          const codeBlockMatch = result.match(/```json([\s\S]*?)```/);
+          if (codeBlockMatch && codeBlockMatch[1]) {
+            parsed = JSON.parse(codeBlockMatch[1].trim());
+          } else {
+            throw new Error("Failed to extract JSON from code block.");
+          }
+        } else {
+          parsed = JSON.parse(result);
+        }
+
         const evaluation = new Evaluation(rubric.name);
 
         for (const item of parsed.items) {
