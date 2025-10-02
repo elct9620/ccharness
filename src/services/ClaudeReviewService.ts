@@ -1,4 +1,4 @@
-import { query } from "@anthropic-ai/claude-code";
+import { query } from "@anthropic-ai/claude-agent-sdk";
 import { inject, injectable } from "tsyringe";
 
 import { Criteria } from "@/entities/Criteria";
@@ -68,7 +68,7 @@ export class ClaudeReviewService implements ReviewService {
         maxTurns: 50,
         hooks: {},
         pathToClaudeCodeExecutable: options?.executablePath!,
-        customSystemPrompt: `You are expert engineer that helps to review code.
+        systemPrompt: `You are expert engineer that helps to review code.
         The user will provide you path and a rubric. Think more about the rubric and the code step by step.
 
         Filling in orders, comment, maxScore, and score for each criterion in the rubric with following JSON format.

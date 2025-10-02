@@ -8,7 +8,7 @@ import type { PostToolUseHookInput } from "./port";
 
 export type CommitReminderInput = {
   hook: PostToolUseHookInput;
-  message?: string;
+  message: string | undefined;
   options: {
     maxFiles: number;
     maxLines: number;

@@ -15,7 +15,7 @@ CCharness is a lightweight harness for Claude Code, built with TypeScript and de
 - **CLI Framework**: Commander.js (v14)
 - **Dependency Injection**: tsyringe with @abraham/reflection
 - **Code Formatting**: Prettier (v3.6.2) with organize-imports plugin
-- **Claude Code Integration**: @anthropic-ai/claude-code for API access
+- **Claude Agent SDK**: @anthropic-ai/claude-agent-sdk for API access
 - **Output Formatting**: console-table-printer for structured console output
 
 ## Common Commands
