@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1](https://github.com/elct9620/ccharness/compare/v0.11.0...v0.11.1) (2025-10-02)
+
+
+### Bug Fixes
+
+* handle JSON responses wrapped in markdown code blocks ([ccd6685](https://github.com/elct9620/ccharness/commit/ccd6685f5d7fad6bcc7bb82b708c8f528907ba2a))
+
 ## [0.11.0](https://github.com/elct9620/ccharness/compare/v0.10.1...v0.11.0) (2025-09-21)
 
 
