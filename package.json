@@ -22,7 +22,7 @@
     "@types/node": "^24.3.0",
     "prettier": "3.6.2",
     "prettier-plugin-organize-imports": "^4.2.0",
-    "rolldown": "1.0.0-beta.40",
+    "rolldown": "1.0.0-beta.41",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
